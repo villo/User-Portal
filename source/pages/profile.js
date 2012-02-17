@@ -11,17 +11,19 @@ enyo.kind({
 			]},
 			{classes: "span8", components: [
 				
-				{tag: "a", classes: "btn pull-right", components: [
+				{tag: "a", classes: "btn pull-right", onclick: "editProfile", components: [
 					{tag: "i", classes: "icon-pencil"},
 					{tag: "span", content: " Edit Profile"}
 				]},
 				
 				{tag: "h1", content: "", name: "profileUsername"},
 				{content: "", name: "profileFullName"},
+				{content: "<br />"},
 				{classes: "well", name: "profileBio", content: ""},
 				{content: "", name: "profileLocation"},
 			]}
 		]},
+		{kind: "editProfile"}
 	],
 	create: function(){
 		this.inherited(arguments);
@@ -58,5 +60,31 @@ enyo.kind({
 			this.$.alert.createComponent({kind: "Alert", type: "error", title: "Error Loading Profile", content: "An unknown error occured while loading the profile. Please try again later.", clearOnClose: true});
 			this.$.alert.render();
 		}
+	},
+	editProfile: function(){
+		this.$.editProfile.open();
+	}
+});
+
+
+enyo.kind({
+	name: "editProfile",
+	kind: "Control",
+	components: [
+		{kind: "Modal", keyboard: true, components: [
+			{kind: "ModalHeader", content: "Edit Profile", closeButton: true},
+			{kind: "ModalBody", components: [
+			
+			]},
+			{kind: "ModalFooter", components: [
+				{classes: "pull-right", components: [
+					{tag: "a", classes: "btn btn-primary", content: "Save Changes"},
+					{tag: "a", classes: "btn", content: "Cancel"}
+				]}
+			]}
+		]}
+	],
+	open: function(){
+		this.$.modal.show();
 	}
 })

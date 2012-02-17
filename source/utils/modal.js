@@ -1,5 +1,5 @@
 /*
- * TODO: Finish the modal kind.
+ * TODO: Add in x-button published prop
  * Idea for settings: 
  * 		Use the left-hand side icon-driven navigation
  */
@@ -8,15 +8,18 @@ enyo.kind({
 	name: "ModalHeader",
 	kind: "Control",
 	published: {
-		content: ""
+		content: "",
+		closeButton: false
 	},
 	components: [
 		{classes: "modal-header", name: "theHeader", components: [
+			{tag: "a", name: "closeButton", classes: "close", attributes: {"data-dismiss": "modal"}, content: "&times;", showing: false},
 			{name: "client"},
 		]},
 	],
 	create: function(){
 		this.inherited(arguments);
+		this.$.closeButton.setShowing(this.closeButton);
 		if(this.$.client.children.length <= 0){
 			this.$.theHeader.createComponent({
 				tag: "h3", 
