@@ -55,7 +55,7 @@ enyo.kind({
 			/*
 			 * Add a new alert:
 			 */
-			this.$.alert.createComponent({kind: "alert", type: "error", title: "Error Loading Profile", content: "An unknown error occured while loading the profile. Please try again later.", clearOnClose: true});
+			this.$.alert.createComponent({kind: "Alert", type: "error", title: "Error Loading Profile", content: "An unknown error occured while loading the profile. Please try again later.", clearOnClose: true});
 			this.$.alert.render();
 		}
 	}

@@ -1,5 +1,5 @@
 enyo.kind({
-	name: "alert",
+	name: "Alert",
 	kind: "Control",
 	published: {
 		//Supports info, error, and success.

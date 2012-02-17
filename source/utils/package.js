@@ -1,3 +1,4 @@
 enyo.depends(
-	"alert.js"
+	"alert.js",
+	"modal.js"
 )
