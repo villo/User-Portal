@@ -10,10 +10,16 @@ enyo.kind({
 				]}
 			]},
 			{classes: "span8", components: [
+				
+				{tag: "a", classes: "btn pull-right", components: [
+					{tag: "i", classes: "icon-pencil"},
+					{tag: "span", content: " Edit Profile"}
+				]},
+				
 				{tag: "h1", content: "", name: "profileUsername"},
 				{content: "", name: "profileFullName"},
 				{classes: "well", name: "profileBio", content: ""},
-				{content: "", name: "profileLocation"}
+				{content: "", name: "profileLocation"},
 			]}
 		]},
 	],
