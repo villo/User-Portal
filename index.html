@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Villo - User Portal</title>
+	
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	
+	<style type="text/css">
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+		}
+    </style>
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+	
+	<!-- Load up the Villo library. We could do this in Enyo, but that could cause problems -->
+	<script src="lib/villo/villo.js" type="text/javascript"></script>
+	<script src="lib/villo/info.villo.js" type="text/javascript"></script>
+	
+	<script src="lib/enyo/enyo.js" type="text/javascript"></script>
+	<script src="package.js" type="text/javascript"></script>
+	
+	<link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+</head>
+
+<body onload="new App().renderInto(document.body)">
+	<script type="text/javascript">
+	
+	/*
+	 * Fully cross-domain AJAX request using YQL. 
+	 */
+	
+/*
+var cbFunc = function(data) {  
+    	alert("yay");
+	    // If we have something to work with...  
+	    if ( data.results[0] ) {  
+	        // Strip out all script tags, for security reasons.  
+	        // BE VERY CAREFUL. This helps, but we should do more.  
+	       // data = data.results[0].replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');  
+	  
+	        // If the user passed a callback, and it  
+	        // is a function, call it, and send through the data var.  
+	        if ( typeof callback === 'function') {  
+	            callback(data);  
+	        }  
+	    }  
+	    // Else, Maybe we requested a site that doesn't exist, and nothing returned.  
+	    else throw new Error('Nothing returned from getJSON.');  
+    }
+    
+function requestCrossDomain(site, callback) {  
+    
+    // Take the provided url, and add it to a YQL query. Make sure you encode it!  
+    var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from html where url="' + site + '"') + '&format=json&callback=cbFunc';  
+  
+    // Request that YSQL string, and run a callback function.  
+    // Pass a defined function to prevent cache-busting.  
+    
+    $script(yql);    
+}  
+
+requestCrossDomain('http://www.cnn.com', function(results) {  
+	alert(results);
+});  
+*/
+	</script>
+</body>
+
+</html>
