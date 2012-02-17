@@ -57,7 +57,7 @@ enyo.kind({
 			//Check for already rendered lazy views
 			this._hidePane(this.pane);
 			this.createComponent(this._getLazyPane(name));
-			this.render();
+			this.$[name].render();
 			this._showPane(this._getPageNumber(name));
 			this._deleteLazyPane(name);
 		}else{

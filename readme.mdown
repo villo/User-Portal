@@ -1,1 +1,3 @@
 ### Villo User Site
+
+This is the actual user site that is currently in development for Villo.
