@@ -30,6 +30,10 @@ enyo.kind({
 							]},
 						]},
 						
+						{tag: "form", classes: "navbar-search pull-left", components: [
+							{tag: "input", classes: "search-query", attributes: {type: "text", placeholder: "Search for User"}}
+						]},
+						
 						
 						{tag: "ul", classes: "nav pull-right", components: [
 							{tag: "li", classes: "dropdown", components: [

@@ -43,7 +43,18 @@ enyo.kind({
 					callback: enyo.bind(enyo.bind(this, this.gotProfile))
 				});
 			}else{
-				
+				//Check to make sure that we got a username. Sometime we may be talky, but we don't want to show log info as a user. 
+				if(inSender.data.username){
+					villo.profile.get({
+						username: inSender.data.username,
+						callback: enyo.bind(enyo.bind(this, this.gotProfile))
+					});
+				}else{
+					//They still called activate, so let's show our own profile.
+					villo.profile.get({
+						callback: enyo.bind(enyo.bind(this, this.gotProfile))
+					});
+				}
 			}
 		}else{
 			//Just assume that they want to see their own profile.
@@ -95,17 +106,22 @@ enyo.kind({
 		{kind: "Modal", keyboard: true, components: [
 			{kind: "ModalHeader", content: "Edit Profile", closeButton: true},
 			{kind: "ModalBody", components: [
-			
+				{content: "Coming soon"}
 			]},
 			{kind: "ModalFooter", components: [
 				{classes: "pull-right", components: [
 					{tag: "a", classes: "btn btn-primary", content: "Save Changes"},
-					{tag: "a", classes: "btn", content: "Cancel"}
+					{tag: "a", classes: "btn", content: "Cancel", onclick: "close"}
 				]}
 			]}
 		]}
 	],
+	
 	open: function(){
 		this.$.modal.show();
+	},
+	
+	close: function(){
+		this.$.modal.hide();
 	}
 })
