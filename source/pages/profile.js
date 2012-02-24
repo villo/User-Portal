@@ -18,7 +18,7 @@ enyo.kind({
 			]},
 			{classes: "span8", components: [
 				
-				{tag: "a", classes: "btn pull-right", onclick: "editProfile", components: [
+				{tag: "a", showing: false, name: "editProfileButton", classes: "btn pull-right", onclick: "editProfile", components: [
 					{tag: "i", classes: "icon-pencil"},
 					{tag: "span", content: " Edit Profile"}
 				]},
@@ -51,6 +51,9 @@ enyo.kind({
 	},
 	gotProfile: function(inSender){
 		if(inSender && inSender.profile){
+			/*
+			 * We got a profile, so let's use it.
+			 */
 			var profile = inSender.profile[0];
 			console.log(profile);
 			this.$.profileUsername.setContent(profile.username);
@@ -60,6 +63,13 @@ enyo.kind({
 			console.log()
 			
 			this.$.profileAvatar.setAttribute("src", "https://api.villo.me/avatar.php?username=" + profile.username);
+			
+			if(villo.user.username.toLowerCase() === profile.username.toLowerCase()){
+				this.$.editProfileButton.setShowing(true);
+			}else{
+				this.$.editProfileButton.setShowing(false);
+			}
+			
 		}else{
 			/*
 			 * Add a new alert:

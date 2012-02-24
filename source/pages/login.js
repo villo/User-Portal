@@ -151,7 +151,8 @@ enyo.kind({
 	
 	showLoginModal: function(){
 		$('#' + this.$.loginModal.id).modal({
-			keyboard: false
+			keyboard: false,
+			backdrop: "static"
 		});
 		$('#' + this.$.loginModal.id).modal('show');
 	},
@@ -162,7 +163,8 @@ enyo.kind({
 	
 	showRegisterModal: function(){
 		$('#' + this.$.registerModal.id).modal({
-			keyboard: false
+			keyboard: false,
+			backdrop: "static"
 		});
 		$('#' + this.$.registerModal.id).modal('show');
 	},
