@@ -1,3 +1,10 @@
+/*
+ * Generic profile page.
+ * 
+ * You can pass params to the activate function, which will in turn update the content.
+ * 
+ * If no params are passed, then it will assume that you want to view your own profile.
+ */
 enyo.kind({
 	name: "profilePage",
 	kind: "Page",
@@ -66,7 +73,11 @@ enyo.kind({
 	}
 });
 
-
+/*
+ * This opens up the controls for editing the profile.
+ * 
+ * The nice thing about this is that you can include this kind anywhere and then load it up. Modularity FTW.
+ */
 enyo.kind({
 	name: "editProfile",
 	kind: "Control",
