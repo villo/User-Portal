@@ -31,6 +31,7 @@ enyo.kind({
 		if(inSender && inSender.friends){
 			enyo.forEach(inSender.friends, this.renderFriends, this);
 		}
+		
 		this.render();
 	},
 	renderFriends: function(inSender){
