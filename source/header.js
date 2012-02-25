@@ -99,6 +99,17 @@ enyo.kind({
 		});
 	},
 	
+	deactiveActive: function(inSender){
+		for(x in this.$.nav.getControls()){
+			if(this.$.nav.getControls().hasOwnProperty(x)){
+				if(this.$.nav.getControls()[x].hasClass("active")){
+					this.$.nav.getControls()[x].removeClass("active");
+				}
+			}
+		}
+		this.$[inSender].parent.addClass("active");
+	},
+	
 	handleDropClick: function(inSender){
 		//These actions can't be generalized, so we're going to make specific cases for each event.
 		if(inSender.action === "logout"){
@@ -106,6 +117,7 @@ enyo.kind({
 				window.location.reload();
 			}
 		}else if(inSender.action === "profile"){
+			this.deactiveActive("profile");
 			this.doPageChange({
 				page: "profile",
 				data: ""

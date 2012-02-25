@@ -66,12 +66,10 @@ enyo.kind({
 			 * We got a profile, so let's use it.
 			 */
 			var profile = inSender.profile[0];
-			console.log(profile);
 			this.$.profileUsername.setContent(profile.username);
 			this.$.profileFullName.setContent((profile.firstname || "") + " " + (profile.lastname || ""));
 			this.$.profileLocation.setContent("Location: " + profile.location);
 			this.$.profileBio.setContent(profile.status.replace(/\n/gi, "<br />") || "");
-			console.log()
 			
 			this.$.profileAvatar.setAttribute("src", "https://api.villo.me/avatar.php?username=" + profile.username);
 			

@@ -36,12 +36,15 @@ enyo.kind({
 				if(this.$.Book.$[inSender.page + "Page"].activate && typeof(this.$.Book.$[inSender.page + "Page"].activate) === "function"){
 					this.$.Book.$[inSender.page + "Page"].activate(inSender);
 				}
+				//Ensure that the header is showing the right tab active:
+				this.parent.$.header.deactiveActive(inSender.page);
 			}else{
 				this.$.Book.pageName(inSender + "Page");
 				//Because it's lazy, we have to call methods through the book.
 				if(this.$.Book.$[inSender + "Page"].activate && typeof(this.$.Book.$[inSender + "Page"].activate) === "function"){
 					this.$.Book.$[inSender + "Page"].activate();
 				}
+				this.parent.$.header.deactiveActive(inSender);
 			}
 		}else{
 			return false;
