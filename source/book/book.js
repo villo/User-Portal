@@ -11,6 +11,7 @@ enyo.kind({
 		
 	},
 	create: function(){
+		this.setOwner = this.owner;
 		this.pane = null;
 		this.lazy = [];
 		//OP
@@ -57,6 +58,7 @@ enyo.kind({
 			//Check for already rendered lazy views
 			this._hidePane(this.pane);
 			this.createComponent(this._getLazyPane(name));
+			this.$[name].owner = this.owner;
 			this.$[name].render();
 			this._showPane(this._getPageNumber(name));
 			this._deleteLazyPane(name);

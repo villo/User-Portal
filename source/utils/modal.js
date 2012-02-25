@@ -72,7 +72,9 @@ enyo.kind({
 	kind: "Control",
 	published: {
 		//Allow the escape key to close the dialog.
-		keyboard: false
+		keyboard: false,
+		//Clicking the background dismisses the modal.
+		background: true
 	},
 	components: [
 		{name: "theModal", classes: "modal fade", components: [
@@ -102,8 +104,14 @@ enyo.kind({
 	},
 	
 	show: function(){
+		if(this.background === false){
+			var background = "static";
+		}else{
+			var background = true;
+		}
 		$('#' + this.$.theModal.id).modal({
-			keyboard: this.keyboard
+			keyboard: this.keyboard,
+			backdrop: background
 		});
 		$('#' + this.$.theModal.id).modal('show');
 	},

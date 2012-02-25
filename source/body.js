@@ -11,7 +11,7 @@ enyo.kind({
 				{kind: "welcomePage", name: "welcomePage"},
 				{kind: "homePage", name: "homePage", lazy: true},
 				{kind: "profilePage", name: "profilePage", lazy: true},
-				{kind: "friendsPage", name: "friendsPage", lazy: true},
+				{kind: "friendsPage", name: "friendsPage", lazy: true, onFriendClicked: "handleFriendClick"},
 				{kind: "appsPage", name: "appsPage", lazy: true},
 			]},
 			//This isn't part of our "book" because we want it to show above the content.
@@ -46,6 +46,10 @@ enyo.kind({
 		}else{
 			return false;
 		}
+	},
+	
+	handleFriendClick: function(inSender, inData){
+		this.pageChange({page: "profile", data: {username: inData}});
 	},
 	
 	create: function(){
