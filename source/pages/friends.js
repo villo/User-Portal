@@ -184,8 +184,10 @@ enyo.kind({
 	components: [
 		{tag: "a", classes: "thumbnail", onmouseover: "itemHover", onmouseout: "itemHoverOut", style: "text-decoration: none;", components: [
 			{tag: "span", name: "exitFriend", showing: false, classes: "pull-right close", content: "&times;", onclick: "deleteFriend"},
+			{content: "<br /> <br />"},
 			{name: "avatar", tag: "img"},
-			{name: "username", content: "", tag: "h3", style: "text-align: center;"}
+			{name: "username", content: "", tag: "h3", style: "text-align: center;"},
+			{content: "<br />"},
 		]},
 		{kind: "Modal", onclick: "stopTheProp", keyboard: true, background: false, components: [
 			{kind: "ModalHeader", content: "Delete Friend?"},
