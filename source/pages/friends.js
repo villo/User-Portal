@@ -1,3 +1,6 @@
+//TODO:
+//Add "Deleting..." text to delete friend button ontap.
+
 enyo.kind({
 	name: "friendsPage",
 	kind: "Page",
@@ -97,17 +100,17 @@ enyo.kind({
 	activate: function(){
 		this.$.friendsModule.activate();
 	},
-	handleFriendClick: function(inSender){
+	handleFriendClick: function(inSender, inEvent){
 		//Extract the username out of the event. It should only be 2 or 3 layers deep, but we go 4 just to be sure.
 		var username = false;
-		if(event.dispatchTarget.username){
-			username = event.dispatchTarget.username;
-		}else if(event.dispatchTarget.parent.username){
-			username = event.dispatchTarget.parent.username;
-		}else if(event.dispatchTarget.parent.parent.username){
-			username = event.dispatchTarget.parent.parent.username;
-		}else if(event.dispatchTarget.parent.parent.parent.username){
-			username = event.dispatchTarget.parent.parent.parent.username;
+		if(inEvent.dispatchTarget.username){
+			username = inEvent.dispatchTarget.username;
+		}else if(inEvent.dispatchTarget.parent.username){
+			username = inEvent.dispatchTarget.parent.username;
+		}else if(inEvent.dispatchTarget.parent.parent.username){
+			username = inEvent.dispatchTarget.parent.parent.username;
+		}else if(inEvent.dispatchTarget.parent.parent.parent.username){
+			username = inEvent.dispatchTarget.parent.parent.parent.username;
 		}
 		//Bubble event to the book (body.js).
 		if(username !== false && username !== ""){
@@ -206,14 +209,14 @@ enyo.kind({
 	itemHoverOut: function(){
 		this.$.exitFriend.setShowing(false);
 	},
-	deleteFriend: function(){
-		this.handleDelete();
+	deleteFriend: function(iSender, inEvent){
+		this.handleDelete("empty", inEvent);
 		//Stop the event from reaching the catch-all click handler.
-		event.stopPropagation();
+		inEvent.stopPropagation();
 	},
-	stopTheProp: function(){
+	stopTheProp: function(iSender, inEvent){
 		//There's a weird bug that causes the modal clicks to pass through, so we need to stop the event propagation.
-		event.stopPropagation();
+		inEvent.stopPropagation();
 	},
 	deleteTheFriend: function(){
 		villo.friends.remove({
@@ -229,18 +232,17 @@ enyo.kind({
 			this.owner.owner.activate({existing: inData});
 		}), 100);
 	},
-	handleDelete: function(){
+	handleDelete: function(inSender, inEvent){
 		var username = false;
-		if(event.dispatchTarget.username){
-			username = event.dispatchTarget.username;
-		}else if(event.dispatchTarget.parent.username){
-			username = event.dispatchTarget.parent.username;
-		}else if(event.dispatchTarget.parent.parent.username){
-			username = event.dispatchTarget.parent.parent.username;
-		}else if(event.dispatchTarget.parent.parent.parent.username){
-			username = event.dispatchTarget.parent.parent.parent.username;
+		if(inEvent.dispatchTarget.username){
+			username = inEvent.dispatchTarget.username;
+		}else if(inEvent.dispatchTarget.parent.username){
+			username = inEvent.dispatchTarget.parent.username;
+		}else if(inEvent.dispatchTarget.parent.parent.username){
+			username = inEvent.dispatchTarget.parent.parent.username;
+		}else if(inEvent.dispatchTarget.parent.parent.parent.username){
+			username = inEvent.dispatchTarget.parent.parent.parent.username;
 		}
-		console.log(event.dispatchTarget);
 		//Bubble event to the book (body.js).
 		if(username !== false && username !== ""){
 			this.deleteUsername = username;
