@@ -31,7 +31,7 @@ enyo.kind({
 						]},
 						
 						{tag: "form", classes: "navbar-search pull-left", components: [
-							{tag: "input", classes: "search-query", attributes: {type: "text", placeholder: "Search for User"}}
+							{tag: "input", name: "userSearch", classes: "search-query", attributes: {type: "text", placeholder: "Search for User"}}
 						]},
 						
 						
@@ -125,5 +125,30 @@ enyo.kind({
 		}else if(inSender.action === "settings"){
 			//TODO
 		}
-	}
+	},
+	
+	rendered: function(){
+		this.inherited(arguments);
+		$("#" + this.$.userSearch.id).typeahead({
+			source: function( typeahead, query ) {
+				var suggest = villo.suggest.username({
+					username: query,
+					callback: enyo.bind(this, function(inSender){
+						if(inSender && inSender.profile){
+							//Build suggestions based on return.
+							var sourceBlock = [];
+							
+							enyo.forEach(inSender.profile, function(x){
+								sourceBlock.push(x.username);
+							});
+							
+							typeahead.process(sourceBlock);
+						}else{
+							typeahead.process([]);
+						}
+					})
+				});
+			},
+		});
+	},
 });
