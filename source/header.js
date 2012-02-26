@@ -30,8 +30,8 @@ enyo.kind({
 							]},
 						]},
 						
-						{tag: "form", classes: "navbar-search pull-left", components: [
-							{tag: "input", name: "userSearch", classes: "search-query", attributes: {type: "text", placeholder: "Search for User"}}
+						{name: "searchForm", classes: "navbar-search pull-left", components: [
+							{tag: "input", name: "userSearch", classes: "search-query", attributes: {type: "text", placeholder: "Search for User"}},
 						]},
 						
 						
@@ -149,6 +149,22 @@ enyo.kind({
 					})
 				});
 			},
+			onselect: enyo.bind(this, function(){
+				for(x in this.$.nav.getControls()){
+					if(this.$.nav.getControls().hasOwnProperty(x)){
+						if(this.$.nav.getControls()[x].hasClass("active")){
+							this.$.nav.getControls()[x].removeClass("active");
+						}
+					}
+				}
+				this.$.profile.parent.addClass("active");
+				this.$.userSearch.hasNode();
+				this.doPageChange({
+					page: "profile",
+					data: {username: this.$.userSearch.node.value}
+				});
+				this.$.userSearch.node.value = "";
+			})
 		});
 	},
 });
