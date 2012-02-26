@@ -163,7 +163,9 @@ enyo.kind({
 					page: "profile",
 					data: {username: this.$.userSearch.node.value}
 				});
-				this.$.userSearch.node.value = "";
+				this.$.userSearch.node.blur();
+				//We like to maintain what's in the search: 
+				//this.$.userSearch.node.value = "";
 			})
 		});
 	},

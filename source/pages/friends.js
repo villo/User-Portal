@@ -68,6 +68,11 @@ enyo.kind({
 		this.inherited(arguments);
 		$("#" + this.$.suggestNewFriend.id).typeahead({
 			source: function( typeahead, query ) {
+				//Add the timeouts to lessen the number of requests we make.
+				if("theTimeout" in window){
+					window.clearTimeout(theTimeout);
+				}
+				theTimeout = window.setTimeout(enyo.bind(this, function(){
 				villo.suggest.username({
 					username: query,
 					callback: enyo.bind(this, function(inSender){
@@ -80,9 +85,12 @@ enyo.kind({
 							});
 							
 							typeahead.process(sourceBlock);
+						}else{
+							typeahead.process([]);
 						}
 					})
 				});
+				}), 250);
 			},
 		});
 	},
