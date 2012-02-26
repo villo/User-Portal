@@ -12,5 +12,6 @@ enyo.depends(
 	//"lib/bootstrap/css/bootstrap-responsive.css",
 	
 	"lib/jquery/jquery.js",
-	"lib/bootstrap/js/bootstrap.js"
+	"lib/bootstrap/js/bootstrap.js",
+	"lib/bootstrap/js/bootstrap-typeahead.js"
 );

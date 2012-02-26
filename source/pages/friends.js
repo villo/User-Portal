@@ -5,7 +5,7 @@ enyo.kind({
 		onFriendClicked: ""
 	},
 	components: [
-		{tag: "a", showing: true, name: "editProfileButton", classes: "btn btn-primary pull-right", onclick: "editProfile", components: [
+		{tag: "a", showing: true, name: "editProfileButton", classes: "btn btn-primary pull-right", onclick: "editProfile", onclick: "addFriend", components: [
 			{tag: "i", classes: "icon-plus icon-white"},
 			{tag: "span", content: " Add Friend"}
 		]},
@@ -15,8 +15,74 @@ enyo.kind({
 		//We no longer really use this alert box.
 		//{kind: "Alert", content: 'You can add a friend by searching for their profile, then pressing the "Add Friend" button.', type: "info"},
 		
-		{kind: "friendsModule", onBubble: "activate", columns: 3, onclick: "handleFriendClick"}
+		{kind: "friendsModule", onBubble: "activate", columns: 3, onclick: "handleFriendClick"},
+		{name: "friendAdder", kind: "Modal", keyboard: true, components: [
+			{kind: "ModalHeader", content: "Add Friend", closeButton: true},
+			{kind: "ModalBody", components: [
+				{classes: "control-group", name: "registerControlGroup4", components: [
+						{tag: "label", classes: "control-label", content: "Search for a user on Villo"},
+						{classes: "controls", components:[
+							{tag: "input", name: "suggestNewFriend", classes: "input", attributes: {"type": "text"}, onkeydown: "friendKeyUp"}
+						]},
+					]}
+			]}
+		]}
 	],
+	addFriend: function(){
+		this.$.friendAdder.show();
+	},
+	friendKeyUp: function(){
+		$("#" + this.$.suggestNewFriend.id).typeahead({
+			source: function( typeahead, query ) {
+				villo.suggest.username({
+					username: query,
+					callback: enyo.bind(this, function(inSender){
+						if(inSender && inSender.profile){
+							//Build suggestions based on return.
+							var sourceBlock = [];
+							
+							enyo.forEach(inSender.profile, function(x){
+								sourceBlock.push(x.username);
+							});
+							
+							typeahead.process(sourceBlock);
+						}
+					})
+				});
+			},
+		});
+		
+		return;
+		
+		
+		if(this.timeout){
+			window.clearTimeout(this.timeout);
+		}
+		this.timeout = window.setTimeout(enyo.bind(this, this.suggest), 1000);
+	},
+	suggest: function(){
+		this.$.suggestNewFriend.hasNode();
+		villo.suggest.username({
+			username: this.$.suggestNewFriend.node.value,
+			callback: enyo.bind(this, this.handleSuggest)
+		});
+	},
+	handleSuggest: function(inSender){
+		if(inSender && inSender.profile){
+			//Build suggestions based on return.
+			var sourceBlock = [];
+			
+			enyo.forEach(inSender.profile, function(x){
+				sourceBlock.push(x.username);
+			});
+			
+			console.log(sourceBlock);
+			
+			$("#" + this.$.suggestNewFriend.id).typeahead({
+				source: sourceBlock
+			});
+		}
+	},
 	activate: function(){
 		this.$.friendsModule.activate();
 	},
