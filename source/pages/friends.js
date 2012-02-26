@@ -19,19 +19,53 @@ enyo.kind({
 		{name: "friendAdder", kind: "Modal", keyboard: true, components: [
 			{kind: "ModalHeader", content: "Add Friend", closeButton: true},
 			{kind: "ModalBody", components: [
-				{classes: "control-group", name: "registerControlGroup4", components: [
-						{tag: "label", classes: "control-label", content: "Search for a user on Villo"},
+				{kind: "Alert", showing: false, name: "theFriendError", type: "error", content: "That username does not exist!"},
+				{tag: "form", classes: "form-horizontal", components: [
+					{classes: "control-group", components: [
+						{tag: "label", classes: "control-label", content: "Search for a user: "},
 						{classes: "controls", components:[
 							{tag: "input", name: "suggestNewFriend", classes: "input", attributes: {"type": "text"}, onkeydown: "friendKeyUp"}
 						]},
 					]}
+				]},
+			]},
+			{kind: "ModalFooter", components: [
+				{classes: "btn btn-success", name: "addTheFriend", content: "Add Friend", onclick: "confirmAdd", attributes: {"data-loading-text": "Adding Friend..."}},
+				{classes: "btn", content: "Cancel", onclick: "closeAddFriend"}
 			]}
 		]}
 	],
 	addFriend: function(){
 		this.$.friendAdder.show();
 	},
-	friendKeyUp: function(){
+	confirmAdd: function(inSender){
+		$("#" + this.$.addTheFriend.id).button("loading");
+		this.$.suggestNewFriend.hasNode();
+		var username = this.$.suggestNewFriend.node.value;
+		villo.friends.add({
+			username: username,
+			callback: enyo.bind(this, this.addedFriend)
+		});
+	},
+	addedFriend: function(inSender){
+		if(inSender && inSender.friends){
+			this.$.friendsModule.activate({existing: inSender});
+			$("#" + this.$.addTheFriend.id).button("reset");
+			this.$.friendAdder.hide();
+			this.$.suggestNewFriend.hasNode();
+			this.$.suggestNewFriend.node.value = "";
+		}else{
+			this.$.theFriendError.setShowing(true);
+			$("#" + this.$.addTheFriend.id).button("reset");
+		}
+	},
+	closeAddFriend: function(){
+		this.$.friendAdder.hide();
+		this.$.suggestNewFriend.hasNode();
+		this.$.suggestNewFriend.node.value = "";
+	},
+	rendered: function(){
+		this.inherited(arguments);
 		$("#" + this.$.suggestNewFriend.id).typeahead({
 			source: function( typeahead, query ) {
 				villo.suggest.username({
@@ -51,37 +85,6 @@ enyo.kind({
 				});
 			},
 		});
-		
-		return;
-		
-		
-		if(this.timeout){
-			window.clearTimeout(this.timeout);
-		}
-		this.timeout = window.setTimeout(enyo.bind(this, this.suggest), 1000);
-	},
-	suggest: function(){
-		this.$.suggestNewFriend.hasNode();
-		villo.suggest.username({
-			username: this.$.suggestNewFriend.node.value,
-			callback: enyo.bind(this, this.handleSuggest)
-		});
-	},
-	handleSuggest: function(inSender){
-		if(inSender && inSender.profile){
-			//Build suggestions based on return.
-			var sourceBlock = [];
-			
-			enyo.forEach(inSender.profile, function(x){
-				sourceBlock.push(x.username);
-			});
-			
-			console.log(sourceBlock);
-			
-			$("#" + this.$.suggestNewFriend.id).typeahead({
-				source: sourceBlock
-			});
-		}
 	},
 	activate: function(){
 		this.$.friendsModule.activate();
