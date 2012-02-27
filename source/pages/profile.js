@@ -11,12 +11,49 @@ enyo.kind({
 	components: [
 		{kind: "Control", name: "alert"},
 		{classes: "row", components: [
-			{classes: "span4", components: [
-				{style: "height: 250px; width: 250px;", components: [
-					{tag: "img", name: "profileAvatar", attributes: {"src": ""}}
-				]}
+			//Left Side:
+			{classes: "span4", name: "left", components: [
+				//Avatar:
+				{style: "height: 300px; background-size: 100%; background-repeat: no-repeat;", name: "profileAvatar", onmouseover: "showResize", onmouseout: "hideResize", components: [
+					{name: "resize", showing: false, classes: "pull-right", style: "opacity: 1; background-color: #fff; padding: 5px;", onclick: "expandAvatar", components: [
+						{tag: "a", name: "resizeIcon", classes: "pull-right icon-resize-full"}
+					]},
+				]},	
+				
+				//Slight spacing
+				{content: "<br />"},
+				
+				//Button Controls:
+				{classes: "pull-left", components: [
+					{classes: "btn btn-primary", components: [
+						{tag: "i", classes: "icon-plus icon-white"},
+						{tag: "span", content: " Add Friend"},
+					]}
+				]},
+				{classes: "pull-right", components: [
+					{classes: "btn", components: [
+						{tag: "i", classes: "icon-envelope"},
+						{tag: "span", content: " Message"},
+					]},
+				]},
+				{content: "<br />"},
+				{content: "<br />"},
+				{classes: "pull-left", components: [
+					{classes: "btn", components: [
+						{tag: "i", classes: "icon-th-large"},
+						{tag: "span", content: " Apps"},
+					]}
+				]},
+				{classes: "pull-right", components: [
+					{classes: "btn", components: [
+						{tag: "i", classes: "icon-th-list"},
+						{tag: "span", content: " Activity"},
+					]}
+				]},
+				
 			]},
-			{classes: "span8", components: [
+			//Right Side:
+			{classes: "span8", name: "right", components: [
 				
 				{tag: "a", showing: false, name: "editProfileButton", classes: "btn pull-right", onclick: "editProfile", components: [
 					{tag: "i", classes: "icon-pencil"},
@@ -32,10 +69,48 @@ enyo.kind({
 		]},
 		{kind: "editProfile"}
 	],
+	/*
+	 * Avatar viewer:
+	 */
+	showResize: function(){
+		this.$.resize.setShowing(true);
+	},
+	hideResize: function(){
+		this.$.resize.setShowing(false);
+	},
+	expandAvatar: function(){
+		if(this.$.right.hasClass("span8")){
+			//Remove existing classes:
+			this.$.right.removeClass("span8");
+			this.$.left.removeClass("span4");
+			//Add new classes:
+			this.$.right.addClass("span6");
+			this.$.left.addClass("span6");
+			//Adjust height of avatar:
+			this.$.profileAvatar.applyStyle("height", "460px");
+			//Swap the icons:
+			this.$.resizeIcon.removeClass("icon-resize-full");
+			this.$.resizeIcon.addClass("icon-resize-small");
+		}else{
+			//Remove existing classes:
+			this.$.right.removeClass("span6");
+			this.$.left.removeClass("span6");
+			//Add new classes:
+			this.$.right.addClass("span8");
+			this.$.left.addClass("span4");
+			//Adjust height of avatar:
+			this.$.profileAvatar.applyStyle("height", "300px");
+			//Swap the icons:
+			this.$.resizeIcon.removeClass("icon-resize-small");
+			this.$.resizeIcon.addClass("icon-resize-full");
+		}
+		//this.$.avatarViewer.show();
+	},
 	create: function(){
 		this.inherited(arguments);
 	},
 	activate: function(inSender){
+		this.clearBody()
 		if(inSender && inSender.page){
 			if(inSender.data === ""){
 				//Just load our own profile.
@@ -58,7 +133,18 @@ enyo.kind({
 			}
 		}else{
 			//Just assume that they want to see their own profile.
+			villo.profile.get({
+				callback: enyo.bind(enyo.bind(this, this.gotProfile))
+			});
 		}
+	},
+	clearBody: function(){
+		this.$.profileUsername.setContent("");
+		this.$.profileFullName.setContent("");
+		this.$.profileLocation.setContent("");
+		this.$.profileBio.setContent("");
+		
+		this.$.profileAvatar.setAttribute("src", "");
 	},
 	gotProfile: function(inSender){
 		if(inSender && inSender.profile){
@@ -71,7 +157,7 @@ enyo.kind({
 			this.$.profileLocation.setContent("Location: " + profile.location);
 			this.$.profileBio.setContent(profile.status.replace(/\n/gi, "<br />") || "");
 			
-			this.$.profileAvatar.setAttribute("src", "https://api.villo.me/avatar.php?username=" + profile.username);
+			this.$.profileAvatar.addStyles("background-image: url(https://api.villo.me/avatar.php?username=" + profile.username + ")")
 			
 			if(villo.user.username.toLowerCase() === profile.username.toLowerCase()){
 				this.$.editProfileButton.setShowing(true);
