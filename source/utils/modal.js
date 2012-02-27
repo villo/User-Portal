@@ -106,6 +106,8 @@ enyo.kind({
 	show: function(){
 		if(this.background === false){
 			var background = "static";
+		}else if(this.background === "hide"){
+			var background = false;
 		}else{
 			var background = true;
 		}
