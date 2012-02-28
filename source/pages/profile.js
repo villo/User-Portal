@@ -143,8 +143,8 @@ enyo.kind({
 		this.$.profileFullName.setContent("");
 		this.$.profileLocation.setContent("");
 		this.$.profileBio.setContent("");
-		
-		this.$.profileAvatar.setAttribute("src", "");
+		this.$.profileAvatar.addStyles("background-image: url()");
+		this.$.editProfileButton.setShowing(false);
 	},
 	gotProfile: function(inSender){
 		if(inSender && inSender.profile){
@@ -157,7 +157,7 @@ enyo.kind({
 			this.$.profileLocation.setContent("Location: " + profile.location);
 			this.$.profileBio.setContent(profile.status.replace(/\n/gi, "<br />") || "");
 			
-			this.$.profileAvatar.addStyles("background-image: url(https://api.villo.me/avatar.php?username=" + profile.username + ")")
+			this.$.profileAvatar.addStyles("background-image: url(https://api.villo.me/avatar.php?username=" + profile.username + ")");
 			
 			if(villo.user.username.toLowerCase() === profile.username.toLowerCase()){
 				this.$.editProfileButton.setShowing(true);
