@@ -78,7 +78,7 @@ enyo.kind({
 			}
 		}
 		inSender.parent.addClass("active");
-		this.doPageChange({
+		this.bubble("onPageChange", {
 			page: inSender.name,
 			data: inSender.data || ""
 		});
@@ -93,7 +93,7 @@ enyo.kind({
 			}
 		}
 		this.$.home.parent.addClass("active");
-		this.doPageChange({
+		this.bubble("onPageChange", {
 			page: inSender.page,
 			data: ""
 		});
@@ -118,7 +118,7 @@ enyo.kind({
 			}
 		}else if(inSender.action === "profile"){
 			this.deactiveActive("profile");
-			this.doPageChange({
+			this.bubble("onPageChange", {
 				page: "profile",
 				data: ""
 			});
@@ -159,7 +159,7 @@ enyo.kind({
 				}
 				this.$.profile.parent.addClass("active");
 				this.$.userSearch.hasNode();
-				this.doPageChange({
+				this.bubble("onPageChange", {
 					page: "profile",
 					data: {username: this.$.userSearch.node.value}
 				});

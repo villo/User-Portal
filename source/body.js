@@ -22,7 +22,7 @@ enyo.kind({
 	],
 	
 	bubbleLogin: function(){
-		this.doLoggedIn();
+		this.bubble("onLoggedIn");
 	},
 	
 	pageChange: function(inSender){

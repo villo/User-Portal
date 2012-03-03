@@ -146,7 +146,7 @@ enyo.kind({
 	},
 	
 	loggedIn: function(){
-		this.doLoggedIn();
+		this.bubble("onLoggedIn");
 	},
 	
 	showLoginModal: function(){

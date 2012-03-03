@@ -5,8 +5,9 @@ enyo.kind({
 		{kind: "header", onPageChange: "pageChange"},
 		{kind: "body", name: "Body", onLoggedIn: "bubbleLogin"}
 	],
-	pageChange: function(inSender, inResponse){
-		this.$.Body.pageChange(inResponse);
+	
+	pageChange: function(inSender, inEvent){
+		this.$.Body.pageChange(inEvent);
 	},
 	
 	rendered: function(){

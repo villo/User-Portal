@@ -114,7 +114,7 @@ enyo.kind({
 		}
 		//Bubble event to the book (body.js).
 		if(username !== false && username !== ""){
-			this.doFriendClicked(username);
+			this.bubble("onFriendClicked", username);
 		}else{
 			//Probably an empty click.
 		}
@@ -168,10 +168,13 @@ enyo.kind({
 	},
 	renderFriends: function(inSender){
 		if(this.itemsRendered < this.limit){
-			this.$.renderBlock.createComponent({kind: "friendsItem", onBubble: "doBubble", classes: "span" + this.columnSpan, username: inSender});
+			this.$.renderBlock.createComponent({kind: "friendsItem", onBubble: "workItUp", classes: "span" + this.columnSpan, username: inSender});
 			this.itemsRendered++;
 		}
 	},
+	workItUp: function(){
+		this.bubble("onBubble");
+	}
 });
 
 enyo.kind({
@@ -213,10 +216,12 @@ enyo.kind({
 		this.handleDelete("empty", inEvent);
 		//Stop the event from reaching the catch-all click handler.
 		inEvent.stopPropagation();
+		return true;
 	},
 	stopTheProp: function(iSender, inEvent){
 		//There's a weird bug that causes the modal clicks to pass through, so we need to stop the event propagation.
 		inEvent.stopPropagation();
+		return true;
 	},
 	deleteTheFriend: function(){
 		villo.friends.remove({
