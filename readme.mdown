@@ -1,6 +1,17 @@
-### Villo User Site
+Villo User Site
+===============
 
-Villo
-=====
+What is this?
+-------------
 
-This is the actual user site that is currently in development for Villo.
+This is the actual user site for Villo, currently in development.
+
+What can I do with this?
+------------------------
+
+Clone the repository and open index.html in a web browser!
+
+Do I need a web server to run this?
+-----------------------------------
+
+No! Villo uses the power of JavaScript to take care of everything! Embrace it.
