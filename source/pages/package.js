@@ -4,5 +4,6 @@ enyo.depends(
 	"profile.js",
 	"friends.js",
 	"apps.js",
-	"login.js"
+	"login.js",
+	"settings.js"
 );

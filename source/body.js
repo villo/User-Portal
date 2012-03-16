@@ -15,17 +15,13 @@ enyo.kind({
 				{kind: "appsPage", name: "appsPage", lazy: true},
 			]},
 			//This isn't part of our "book" because we want it to show above the content.
-			{kind: "loginPage", name: "loginPage", onLoggedIn: "bubbleLogin"},
-			
+			{kind: "loginPage", name: "loginPage"},
 			{kind: "footer"}
 		]}
 	],
 	
-	bubbleLogin: function(){
-		this.bubble("onLoggedIn");
-	},
-	
 	pageChange: function(inSender){
+		//Core page changing mechanic:
 		if(inSender){
 			/*
 			 * We allow this to be called with data or without. We could do this with some easier statements, but I'm okay with being verbose. 
@@ -38,6 +34,22 @@ enyo.kind({
 				}
 				//Ensure that the header is showing the right tab active:
 				this.parent.$.header.deactiveActive(inSender.page);
+				
+				//Clear out originator for hash:
+				if(inSender.originator){
+					delete inSender.originator;
+				}
+				
+				if(villo.app.settings.hashPages === true){
+					//Prep hash string:
+					var hashString = "";
+					for(var x in inSender){
+						if(inSender.hasOwnProperty(x)){
+							hashString += x + "=" + JSON.stringify(inSender[x]) + "&";
+						}
+					}
+					window.location.hash = hashString;
+				}
 			}else{
 				this.$.Book.pageName(inSender + "Page");
 				//Because it's lazy, we have to call methods through the book.
@@ -45,7 +57,10 @@ enyo.kind({
 					this.$.Book.$[inSender + "Page"].activate();
 				}
 				this.parent.$.header.deactiveActive(inSender);
-			}
+				if(villo.app.settings.hashPages === true){
+					window.location.hash = "page=" + inSender;
+				}
+			}			
 		}else{
 			return false;
 		}

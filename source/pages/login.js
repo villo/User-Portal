@@ -92,7 +92,6 @@ enyo.kind({
 		this.$.loginControlGroup2.removeClass("error");
 		this.$.loginUsername.hasNode();
 		this.$.loginPassword.hasNode();
-		console.log(this.$.loginUsername)
 		villo.user.login({
 			username: this.$.loginUsername.node.value,
 			password: this.$.loginPassword.node.value,

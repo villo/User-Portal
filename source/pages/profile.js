@@ -14,10 +14,14 @@ enyo.kind({
 			//Left Side:
 			{classes: "span4", name: "left", components: [
 				//Avatar:
-				{style: "height: 300px; background-size: 100%; background-repeat: no-repeat;", name: "profileAvatar", onmouseover: "showResize", onmouseout: "hideResize", components: [
-					{name: "resize", showing: false, classes: "pull-right", style: "opacity: 1; background-color: #fff; padding: 5px;", onclick: "expandAvatar", components: [
-						{tag: "a", name: "resizeIcon", classes: "pull-right icon-resize-full"}
-					]},
+				{style: "height: 300px; background-size: 100%; background-repeat: no-repeat;", name: "profileAvatar", /*onmouseover: "showResize", onmouseout: "hideResize",*/ components: [
+					
+					//Uncomment to allow profile resizing: 
+					
+					//{name: "resize", showing: false, classes: "pull-right", style: "opacity: 1; background-color: #fff; padding: 5px;", onclick: "expandAvatar", components: [
+					//{tag: "a", name: "resizeIcon", classes: "pull-right icon-resize-full"}
+					//]},
+					
 				]},	
 				
 				//Slight spacing
@@ -25,30 +29,18 @@ enyo.kind({
 				
 				//Button Controls:
 				{classes: "pull-left", components: [
-					{classes: "btn btn-primary", components: [
-						{tag: "i", classes: "icon-plus icon-white"},
-						{tag: "span", content: " Add Friend"},
-					]}
+					{kind: "bootstrap.Button", name: "profileAddFriend", icon: "plus", disabled: true, white: true, content: "Add Friend", type: "primary", onclick: "addFriend"},
 				]},
 				{classes: "pull-right", components: [
-					{classes: "btn", components: [
-						{tag: "i", classes: "icon-envelope"},
-						{tag: "span", content: " Message"},
-					]},
+					{kind: "bootstrap.Button", icon: "envelope", content: "Message"},
 				]},
-				{content: "<br />"},
-				{content: "<br />"},
+				{tag: "br"},
+				{tag: "br"},
 				{classes: "pull-left", components: [
-					{classes: "btn", components: [
-						{tag: "i", classes: "icon-th-large"},
-						{tag: "span", content: " Apps"},
-					]}
+					{kind: "bootstrap.Button", icon: "th-large", content: "Apps"},
 				]},
 				{classes: "pull-right", components: [
-					{classes: "btn", components: [
-						{tag: "i", classes: "icon-th-list"},
-						{tag: "span", content: " Activity"},
-					]}
+					{kind: "bootstrap.Button", icon: "th-list", content: "Activity"},
 				]},
 				
 			]},
@@ -69,43 +61,6 @@ enyo.kind({
 		]},
 		{kind: "editProfile"}
 	],
-	/*
-	 * Avatar viewer:
-	 */
-	showResize: function(){
-		this.$.resize.setShowing(true);
-	},
-	hideResize: function(){
-		this.$.resize.setShowing(false);
-	},
-	expandAvatar: function(){
-		if(this.$.right.hasClass("span8")){
-			//Remove existing classes:
-			this.$.right.removeClass("span8");
-			this.$.left.removeClass("span4");
-			//Add new classes:
-			this.$.right.addClass("span6");
-			this.$.left.addClass("span6");
-			//Adjust height of avatar:
-			this.$.profileAvatar.applyStyle("height", "460px");
-			//Swap the icons:
-			this.$.resizeIcon.removeClass("icon-resize-full");
-			this.$.resizeIcon.addClass("icon-resize-small");
-		}else{
-			//Remove existing classes:
-			this.$.right.removeClass("span6");
-			this.$.left.removeClass("span6");
-			//Add new classes:
-			this.$.right.addClass("span8");
-			this.$.left.addClass("span4");
-			//Adjust height of avatar:
-			this.$.profileAvatar.applyStyle("height", "300px");
-			//Swap the icons:
-			this.$.resizeIcon.removeClass("icon-resize-small");
-			this.$.resizeIcon.addClass("icon-resize-full");
-		}
-		//this.$.avatarViewer.show();
-	},
 	create: function(){
 		this.inherited(arguments);
 	},
@@ -143,7 +98,8 @@ enyo.kind({
 		this.$.profileFullName.setContent("");
 		this.$.profileLocation.setContent("");
 		this.$.profileBio.setContent("");
-		this.$.profileAvatar.addStyles("background-image: url()");
+		this.$.profileAvatar.addStyles("background-image: url('source/img/ajax-loader-profile.gif')");
+		this.$.profileAddFriend.disable();
 		this.$.editProfileButton.setShowing(false);
 	},
 	gotProfile: function(inSender){
@@ -164,7 +120,12 @@ enyo.kind({
 			}else{
 				this.$.editProfileButton.setShowing(false);
 			}
-			
+			this.$.profileAddFriend.reset();
+			if(profile.friend === true){
+				this.$.profileAddFriend.disable();
+			}else{
+				this.$.profileAddFriend.enable();
+			}
 		}else{
 			/*
 			 * Add a new alert:
@@ -175,7 +136,69 @@ enyo.kind({
 	},
 	editProfile: function(){
 		this.$.editProfile.open();
-	}
+	},
+	
+	/*
+	 * Button actions:
+	 */
+	
+	addFriend: function(inSender){
+		//Change button state:
+		inSender.startLoad("Adding Friend...");
+		var friendToAdd = this.$.profileUsername.getContent();
+		villo.friends.add({
+			username: friendToAdd,
+			callback: enyo.bind(this, function(f){
+				if(f && f.friends){
+					inSender.reset();
+					inSender.disable();
+					this.$.alert.createComponent({kind: "Alert", type: "info", title: "Friend Added", content: "You have added " + friendToAdd + " to your friends list!", clearOnClose: true});
+				this.$.alert.render();
+				}
+			})
+		});
+	},
+	
+	
+	
+	
+	/*
+	 * Avatar viewer:
+	 */
+	showResize: function(){
+		this.$.resize.setShowing(true);
+	},
+	hideResize: function(){
+		this.$.resize.setShowing(false);
+	},
+	expandAvatar: function(){
+		if(this.$.right.hasClass("span8")){
+			//Remove existing classes:
+			this.$.right.removeClass("span8");
+			this.$.left.removeClass("span4");
+			//Add new classes:
+			this.$.right.addClass("span6");
+			this.$.left.addClass("span6");
+			//Adjust height of avatar:
+			this.$.profileAvatar.applyStyle("height",  "460px;");
+			//Swap the icons:
+			this.$.resizeIcon.removeClass("icon-resize-full");
+			this.$.resizeIcon.addClass("icon-resize-small");
+		}else{
+			//Remove existing classes:
+			this.$.right.removeClass("span6");
+			this.$.left.removeClass("span6");
+			//Add new classes:
+			this.$.right.addClass("span8");
+			this.$.left.addClass("span4");
+			//Adjust height of avatar:
+			this.$.profileAvatar.applyStyle("height", "300px");
+			//Swap the icons:
+			this.$.resizeIcon.removeClass("icon-resize-small");
+			this.$.resizeIcon.addClass("icon-resize-full");
+		}
+		//this.$.avatarViewer.show();
+	},
 });
 
 /*

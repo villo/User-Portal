@@ -61,7 +61,8 @@ enyo.kind({
 					]}
 				]}
 			]}
-		]}
+		]},
+		{kind: "settingsPage", name: "settingsPage"},
 	],
 	
 	//This function is called when the user if finally logged in, or when it's confirmed that they are.
@@ -123,7 +124,7 @@ enyo.kind({
 				data: ""
 			});
 		}else if(inSender.action === "settings"){
-			//TODO
+			this.$.settingsPage.open();
 		}
 	},
 	
