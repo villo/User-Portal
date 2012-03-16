@@ -37,7 +37,11 @@ enyo.kind({
 		}else{
 			this.loggedIn();
 			if(villo.settings.load({instant: true})){
-				
+				if(villo.app.settings.appStates === true){
+					if(villo.states.get({instant: true})){
+						this.$.Body.pageChange(villo.states.get({instant: true}));
+					}
+				}
 			}else{
 				var settings = {
 					hashPages: true,

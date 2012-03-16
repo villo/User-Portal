@@ -50,6 +50,9 @@ enyo.kind({
 					}
 					window.location.hash = hashString;
 				}
+				if(villo.app.settings.appStates === true){
+					villo.states.set(inSender);
+				}
 			}else{
 				this.$.Book.pageName(inSender + "Page");
 				//Because it's lazy, we have to call methods through the book.
@@ -59,6 +62,9 @@ enyo.kind({
 				this.parent.$.header.deactiveActive(inSender);
 				if(villo.app.settings.hashPages === true){
 					window.location.hash = "page=" + inSender;
+				}
+				if(villo.app.settings.appStates === true){
+					villo.states.set(inSender);
 				}
 			}			
 		}else{
