@@ -15,3 +15,5 @@ Do I need a web server to run this?
 -----------------------------------
 
 No! Villo uses the power of JavaScript to take care of everything! Embrace it.
+
+That said, Villo Integrated Apps will only load on the official website, and not on any local version of the website.
