@@ -113,16 +113,6 @@ enyo.kind({
 	},
 	rendered: function(){
 		this.inherited(arguments);
-		var onmessage = function(e) { 
-		  alert(e.data + ' - origin: ' + e.origin); 
-		} 
-		 
-		if(typeof window.addEventListener != 'undefined') { 
-		  window.addEventListener('message', onmessage, false); 
-		} 
-		else if(typeof window.attachEvent != 'undefined') { 
-		  window.attachEvent('onmessage', onmessage); 
-		}
 	},
 	activate: function(inSender){
 		this.$.appname.setAttribute("value", inSender.name);
@@ -134,8 +124,6 @@ enyo.kind({
 		
 		this.$.form.hasNode();
 		this.$.form.node.submit();
-		
-		//var title = $( "#frame_id").contents().find( "title").html();
 	}
 });
 /*
