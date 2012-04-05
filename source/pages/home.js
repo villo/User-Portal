@@ -10,6 +10,7 @@ enyo.kind({
 	]
 });
 
+
 enyo.kind({
 	name: "homePageItem",
 	kind: "Control",
