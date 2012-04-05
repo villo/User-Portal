@@ -6,10 +6,10 @@ enyo.kind({
 		{tag: "footer", components: [
 			{tag: "p", components: [
 				{classes: "pull-left", components: [
-					{content: "&copy; Villo 2012"},
+					{allowHtml: true, content: "&copy; Villo 2012"},
 					{tag: "a", content: "Privacy Policy", attributes: {"href": "http://villo.me/legal/privacy/"}}
 				]},
-				{classes: "pull-right", content: "Built using <a href='http://enyojs.com' target='_blank'>Enyo</a> and <a href='http://twitter.github.com/bootstrap/' target='_blank'>Bootstrap</a>."}
+				{allowHtml: true, classes: "pull-right", content: "Built using <a href='http://enyojs.com' target='_blank'>Enyo</a> and <a href='http://twitter.github.com/bootstrap/' target='_blank'>Bootstrap</a>."}
 			]},
 		]}
 	]

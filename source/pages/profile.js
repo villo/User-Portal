@@ -25,7 +25,7 @@ enyo.kind({
 				]},	
 				
 				//Slight spacing
-				{content: "<br />"},
+				{tag: "br"},
 				
 				//Button Controls:
 				{classes: "pull-left", components: [
@@ -54,8 +54,8 @@ enyo.kind({
 				
 				{tag: "h1", content: "", name: "profileUsername"},
 				{content: "", name: "profileFullName"},
-				{content: "<br />"},
-				{classes: "well", name: "profileBio", content: ""},
+				{tag: "br"},
+				{allowHtml: true, classes: "well", name: "profileBio", content: ""},
 				{content: "", name: "profileLocation"},
 			]}
 		]},

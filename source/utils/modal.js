@@ -13,7 +13,7 @@ enyo.kind({
 	},
 	components: [
 		{classes: "modal-header", name: "theHeader", components: [
-			{tag: "a", name: "closeButton", classes: "close", attributes: {"data-dismiss": "modal"}, content: "&times;", showing: false},
+			{tag: "a", name: "closeButton", classes: "close", attributes: {"data-dismiss": "modal"}, content: "&times;", allowHtml: true, showing: false},
 			{name: "client"},
 		]},
 	],
