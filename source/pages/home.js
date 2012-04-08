@@ -10,7 +10,7 @@ enyo.kind({
 	],
 	rendered: function(){
 		this.inherited(arguments);
-		//Allow timeago, which manages our timestamps:
+		//Set up "timeago", which manages our timestamps:
 		jQuery("span.timeago").timeago();
 	}
 });
@@ -44,7 +44,7 @@ enyo.kind({
 						]},
 						{tag: "li", classes: "divider"},
 						{tag: "li", components: [
-							{tag: "a", content: "View App", onclick: "hidePost"}
+							{tag: "a", content: "View App", onclick: "viewApp"}
 						]},
 					]}
 				]},
@@ -61,6 +61,9 @@ enyo.kind({
 			//Then remove it completely: 
 			this.destroy();
 		}));
+	},
+	viewProfile: function(){
+		this.bubble("onViewProfile", this.username);
 	},
 	create: function(){
 		this.inherited(arguments);

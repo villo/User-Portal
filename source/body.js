@@ -6,6 +6,7 @@ enyo.kind({
 	},
 	handlers: {
 		onAlreadyLoggedIn: "skipWelcome",
+		onViewProfile: "handleProfile"
 	},
 	components: [
 		{classes: "container", components: [
@@ -23,6 +24,9 @@ enyo.kind({
 	],
 	skipWelcome: function(){
 		this.$.Book.pageName("homePage");
+	},
+	handleProfile: function(inSender, inEvent){
+		this.pageChange({page: "profile", data: {username: inEvent}});
 	},
 	pageChange: function(inSender){
 		//Core page changing mechanic:

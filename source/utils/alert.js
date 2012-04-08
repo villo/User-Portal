@@ -16,7 +16,7 @@ enyo.kind({
 	},
 	components: [
 		{classes: "alert fade in", name: "theAlert", components: [
-			{tag: "a", classes: "close", content: "&times;", attributes: {"data-dismiss": "alert"}},
+			{tag: "a", classes: "close", allowHtml: true, content: "&times;", attributes: {"data-dismiss": "alert"}},
 			{tag: "h4", name: "header", classes: "alert-heading", content: ""},
 			{name: "client"},
 		]}
