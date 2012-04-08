@@ -35,7 +35,10 @@ enyo.kind({
 			//Show the login page.
 			this.$.Body.$.loginPage.showLoginModal();
 		}else{
+			//Pass needed events:
 			this.loggedIn();
+			//Only show the welcome page on first login:
+			this.waterfall("onAlreadyLoggedIn");
 			if(villo.settings.load({instant: true})){
 				if(villo.app.settings.appStates === true){
 					if(villo.states.get({instant: true})){

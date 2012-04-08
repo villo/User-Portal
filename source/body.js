@@ -4,7 +4,9 @@ enyo.kind({
 	events: {
 		onLoggedIn: ""
 	},
-	
+	handlers: {
+		onAlreadyLoggedIn: "skipWelcome",
+	},
 	components: [
 		{classes: "container", components: [
 			{kind: "Book", name: "Book", components: [
@@ -19,7 +21,9 @@ enyo.kind({
 			{kind: "footer"}
 		]}
 	],
-	
+	skipWelcome: function(){
+		this.$.Book.pageName("homePage");
+	},
 	pageChange: function(inSender){
 		//Core page changing mechanic:
 		if(inSender){
