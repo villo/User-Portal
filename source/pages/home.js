@@ -8,6 +8,11 @@ enyo.kind({
 			{kind: "homePageItem", content: "Test 3, with some more content."}
 		]}
 	],
+	create: function(){
+		//Call history:
+		
+		//Listen: 
+	},
 	rendered: function(){
 		this.inherited(arguments);
 		//Set up "timeago", which manages our timestamps:
