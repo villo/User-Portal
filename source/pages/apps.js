@@ -106,7 +106,7 @@ enyo.kind({
 			{tag: "input", name: "token", attributes: {"type": "hidden", "name": "villo_token"}},
 			{tag: "input", name: "apikey", attributes: {"type": "hidden", "name": "apikey"}},
 		]},
-		{name: "frame", tag: "iframe", style: "width: 940px; height: 700px;", attributes: {"scrolling": "no", "seamless": "seamless", "frameborder": "0", "name": "app_frame", "sandbox": "allow-forms allow-same-origin allow-scripts", "": ""}}
+		{name: "frame", tag: "iframe", style: "width: 940px; height: 700px;", attributes: {"scrolling": "no", "seamless": "seamless", "frameborder": "0", "name": "app_frame", "sandbox": "allow-forms allow-same-origin allow-scripts"}, content: "Villo Integrated Apps require that your browser support iframes."}
 	],
 	create: function(){
 		this.inherited(arguments);
