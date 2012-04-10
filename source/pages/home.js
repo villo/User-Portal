@@ -9,6 +9,7 @@ enyo.kind({
 		]}
 	],
 	create: function(){
+		this.inherited(arguments);
 		//Call history:
 		
 		//Listen: 
