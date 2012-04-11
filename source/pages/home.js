@@ -24,9 +24,8 @@ enyo.kind({
 	},
 	gotHistory: function(inSender){
 		for(var x in inSender){
-			this.$.posts.createComponent({kind: "homePageItem", content: inSender[x].description, timestamp: inSender[x].timestamp, username: inSender[x].username});
+			this.$.posts.createComponent({kind: "homePageItem", content: inSender[x].description, timestamp: inSender[x].timestamp, username: inSender[x].username}).render();
 		};
-		this.$.posts.render();
 		//Set up "timeago", which manages our timestamps:
 		jQuery("span.timeago").timeago();
 	}
@@ -35,13 +34,14 @@ enyo.kind({
 enyo.kind({
 	name: "homePageItem",
 	kind: "Control",
+	prepend: true,
 	published: {
 		"span": 6,
 		"content": "",
 		"username": "Guest",
 		"timestamp": enyo.now()
 	},
-	style: "margin-bottom: 10px;",
+	style: "margin-bottom: 10px; display: none;",
 	components: [
 		{classes: "row-fluid", components: [
 			{classes: "span2", components: [
@@ -93,5 +93,14 @@ enyo.kind({
 		this.$.avatar.setSrc("https://api.villo.me/avatar.php?thumbnail=true&username=" + escape(this.username));
 		this.$.timestamp.setAttribute("title", new Date(this.timestamp).toISOString());
 		jQuery("#" + this.id).timeago();
+	},
+	rendered: function(){
+		this.inherited(arguments);
+		if(!this.created){
+			this.created = true;
+			$("#" + this.id).fadeIn(800);
+		}else{
+			$("#" + this.id).css("display", "block");
+		}
 	}
 });
