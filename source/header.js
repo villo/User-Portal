@@ -34,7 +34,6 @@ enyo.kind({
 							{tag: "input", name: "userSearch", classes: "search-query", attributes: {type: "text", placeholder: "Search for User"}},
 						]},
 						
-						
 						{tag: "ul", classes: "nav pull-right", components: [
 							{tag: "li", classes: "dropdown", components: [
 								{tag: "a", classes: "dropdown-toggle", attributes: {"href": "#", "data-toggle": "dropdown"}, components: [
