@@ -1,6 +1,6 @@
 enyo.kind({
 	name: "bootstrap.Button",
-	kind: "Control",
+	kind: "Button",
 	classes: "btn",
 	published: {
 		type: "",
@@ -8,7 +8,8 @@ enyo.kind({
 		disabled: false,
 		content: "Button",
 		white: false,
-		disabled: false
+		disabled: false,
+		forceType: ""
 	},
 	handlers: {
 		onclick: "handleClick"
@@ -32,6 +33,9 @@ enyo.kind({
 		}
 		if(this.disabled === true){
 			this.addClass("disabled");
+		}
+		if(this.forceType !== ""){
+			this.setAttribute("type", this.forceType);
 		}
 		
 		this.$.content.setContent(this.content);

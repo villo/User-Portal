@@ -2,6 +2,7 @@ enyo.kind({
 	name: "homePage",
 	kind: "Page",
 	components: [
+		{kind: "Poster"},
 		{classes: "row", name: "posts", components: [
 			//Populated auto-magically.
 		]}
@@ -30,6 +31,58 @@ enyo.kind({
 		jQuery("span.timeago").timeago();
 	}
 });
+
+enyo.kind({
+	name: "Poster",
+	kind: "Control",
+	classes: "well",
+	published: {
+		"placeholder": "Share a new post...",
+		"content": ""
+	},
+	expanded: false,
+	style: "width: 310px; margin-left: 100px;",
+	components: [
+		{name: "placeholder", showing: true, onclick: "swapView", components: [
+			{tag: "input", name: "input", style: "margin-bottom: 0px;"},
+			{kind: "bootstrap.Button", content: "New Post", classes: "pull-right"},
+		]},
+		{tag: "form", showing: false, name: "form", classes: "form-horizontal", components: [
+			{classes: "close", tag: "a", allowHtml: true, content: "&times;", style: "height: 0px; margin-top: -15px; margin-right: -15px;", onclick: "swapView"},
+			{tag: "textarea", name: "area", classes: "input-xlarge", style: "resize: none; width: 300px;"},
+			{classes: "pull-right", style: "margin-top: 10px;", components: [
+				{kind: "bootstrap.Button", type: "primary", content: "Post"},
+			]},
+			//Floats screw up heights, so we manually add the padding:
+			{style: "height: 19px;"}
+		]}
+	],
+	create: function(){
+		this.inherited(arguments);
+		
+		this.$.input.setAttribute("placeholder", this.placeholder);
+		this.$.area.setAttribute("placeholder", this.placeholder);
+		
+		if(this.content !== ""){
+			this.$.area.setContent(this.content);
+			this.swapView();
+		}
+	},
+	swapView: function(){
+		if(this.expanded === false){
+			this.expanded = true;
+			this.$.placeholder.setShowing(false);
+			this.$.form.setShowing(true);
+			this.$.area.hasNode().focus();
+		}else{
+			this.expanded = false;
+			this.$.area.hasNode().value = "";
+			this.$.area.hasNode().blur();
+			this.$.placeholder.setShowing(true);
+			this.$.form.setShowing(false);
+		}
+	}
+})
 
 enyo.kind({
 	name: "homePageItem",
