@@ -3,6 +3,7 @@ enyo.kind({
 	kind: "Page",
 	components: [
 		{kind: "Poster"},
+		{tag: "h6", content: "Real-time Updates"},
 		{tag: "hr", style: "margin: 9px 0;"},
 		{classes: "row", name: "posts", components: [
 			//Populated auto-magically.
@@ -56,7 +57,7 @@ enyo.kind({
 					{classes: "close", tag: "a", allowHtml: true, content: "&times;", style: "height: 0px; margin-top: -15px; margin-right: -15px;", onclick: "swapView"},
 					{tag: "textarea", name: "area", classes: "input-xlarge", style: "resize: none; width: 330px;"},
 					{classes: "pull-right", components: [
-						{kind: "bootstrap.Button", type: "primary", content: "Post"},
+						{kind: "bootstrap.Button", type: "primary", content: "Post", onclick: "postItem"},
 					]},
 					//Floats screw up heights, so we manually add the padding:
 					{style: "height: 19px;"}
@@ -90,6 +91,10 @@ enyo.kind({
 			this.$.placeholder.setShowing(true);
 			this.$.form.setShowing(false);
 		}
+	},
+	postItem: function(){
+		console.log("posting...");
+		return true;
 	}
 })
 

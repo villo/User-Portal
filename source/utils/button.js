@@ -1,6 +1,6 @@
 enyo.kind({
 	name: "bootstrap.Button",
-	kind: "Button",
+	kind: "Control",
 	classes: "btn",
 	published: {
 		type: "",
