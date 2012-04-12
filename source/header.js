@@ -16,17 +16,17 @@ enyo.kind({
 					{tag: "a", page: "home", classes: "brand", content: "Villo", onclick: "handleLogoClick"},
 					{classes: "nav-collapse", components: [
 						{tag: "ul", name: "nav", classes: "nav", components: [
-							{tag: "li", classes: "active", components: [
+							{tag: "li", classes: "active", style: "cursor: pointer;", components: [
 								{tag: "a", name: "home", content: "Home", onclick: "headerClickHandler"},
 							]},
 							{tag: "li", classes: "", components: [
-								{tag: "a", name: "profile", content: "Profile", onclick: "headerClickHandler"},
+								{tag: "a", name: "profile", style: "cursor: pointer;", content: "Profile", onclick: "headerClickHandler"},
 							]},
 							{tag: "li", classes: "", components: [
-								{tag: "a", name: "friends", content: "Friends", onclick: "headerClickHandler"},
+								{tag: "a", name: "friends", style: "cursor: pointer;", content: "Friends", onclick: "headerClickHandler"},
 							]},
 							{tag: "li", classes: "", components: [
-								{tag: "a", name: "apps", content: "Apps", onclick: "headerClickHandler"},
+								{tag: "a", name: "apps", style: "cursor: pointer;", content: "Apps", onclick: "headerClickHandler"},
 							]},
 						]},
 						
