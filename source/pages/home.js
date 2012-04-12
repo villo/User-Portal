@@ -3,6 +3,7 @@ enyo.kind({
 	kind: "Page",
 	components: [
 		{kind: "Poster"},
+		{tag: "hr", style: "margin: 9px 0;"},
 		{classes: "row", name: "posts", components: [
 			//Populated auto-magically.
 		]}
@@ -35,26 +36,32 @@ enyo.kind({
 enyo.kind({
 	name: "Poster",
 	kind: "Control",
-	classes: "well",
 	published: {
 		"placeholder": "Share a new post...",
 		"content": ""
 	},
 	expanded: false,
-	style: "width: 310px; margin-left: 100px;",
+	style: "width: 460px; margin-bottom: 0px;",
 	components: [
-		{name: "placeholder", showing: true, onclick: "swapView", components: [
-			{tag: "input", name: "input", style: "margin-bottom: 0px;"},
-			{kind: "bootstrap.Button", content: "New Post", classes: "pull-right"},
-		]},
-		{tag: "form", showing: false, name: "form", classes: "form-horizontal", components: [
-			{classes: "close", tag: "a", allowHtml: true, content: "&times;", style: "height: 0px; margin-top: -15px; margin-right: -15px;", onclick: "swapView"},
-			{tag: "textarea", name: "area", classes: "input-xlarge", style: "resize: none; width: 300px;"},
-			{classes: "pull-right", style: "margin-top: 10px;", components: [
-				{kind: "bootstrap.Button", type: "primary", content: "Post"},
+		{classes: "row-fluid", components: [
+			{classes: "span2", components: [
+				{classes: "thumbnail", name: "avatar", style: "height: 50px; width: 50px;", tag: "img", src: ""}
 			]},
-			//Floats screw up heights, so we manually add the padding:
-			{style: "height: 19px;"}
+			{classes: "span10", components: [
+				{name: "placeholder", classes: "well", showing: true, onclick: "swapView", components: [
+					{tag: "input", name: "input", style: "margin-bottom: 0px;"},
+					{kind: "bootstrap.Button", content: "New Post", classes: "pull-right"},
+				]},
+				{tag: "form", showing: false, name: "form", classes: "well", components: [
+					{classes: "close", tag: "a", allowHtml: true, content: "&times;", style: "height: 0px; margin-top: -15px; margin-right: -15px;", onclick: "swapView"},
+					{tag: "textarea", name: "area", classes: "input-xlarge", style: "resize: none; width: 330px;"},
+					{classes: "pull-right", components: [
+						{kind: "bootstrap.Button", type: "primary", content: "Post"},
+					]},
+					//Floats screw up heights, so we manually add the padding:
+					{style: "height: 19px;"}
+				]}
+			]},
 		]}
 	],
 	create: function(){
@@ -66,7 +73,9 @@ enyo.kind({
 		if(this.content !== ""){
 			this.$.area.setContent(this.content);
 			this.swapView();
-		}
+		};
+		
+		this.$.avatar.setSrc("https://api.villo.me/avatar.php?thumbnail=true&username=" + escape(villo.user.getUsername()));
 	},
 	swapView: function(){
 		if(this.expanded === false){
