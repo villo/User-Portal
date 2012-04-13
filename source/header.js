@@ -13,7 +13,7 @@ enyo.kind({
 						{tag: "span", classes: "icon-bar"},
 						{tag: "span", classes: "icon-bar"}
 					]},
-					{tag: "a", page: "home", classes: "brand", content: "Villo", onclick: "handleLogoClick"},
+					{tag: "a", page: "home", classes: "brand", content: "Villo", style: "cursor: pointer;", onclick: "handleLogoClick"},
 					{classes: "nav-collapse", components: [
 						{tag: "ul", name: "nav", classes: "nav", components: [
 							{tag: "li", classes: "active", style: "cursor: pointer;", components: [

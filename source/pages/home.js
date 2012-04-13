@@ -34,19 +34,23 @@ enyo.kind({
 	}
 });
 
+/*
+ * Generic Posting kind:
+ */
 enyo.kind({
 	name: "Poster",
 	kind: "Control",
 	published: {
 		"placeholder": "Share a new post...",
-		"content": ""
+		"content": "",
+		"width": "460px"
 	},
 	expanded: false,
-	style: "width: 460px; margin-bottom: 0px;",
+	style: "margin-bottom: 0px;",
 	components: [
 		{classes: "row-fluid", components: [
 			{classes: "span2", components: [
-				{classes: "thumbnail", name: "avatar", style: "height: 50px; width: 50px;", tag: "img", src: ""}
+				{classes: "thumbnail", name: "avatar", style: "height: 58px; width: 58px;", tag: "img", src: ""}
 			]},
 			{classes: "span10", components: [
 				{name: "placeholder", classes: "well", showing: true, onclick: "swapView", components: [
@@ -57,7 +61,7 @@ enyo.kind({
 					{classes: "close", tag: "a", allowHtml: true, content: "&times;", style: "height: 0px; margin-top: -15px; margin-right: -15px;", onclick: "swapView"},
 					{tag: "textarea", name: "area", classes: "input-xlarge", style: "resize: none; width: 330px;"},
 					{classes: "pull-right", components: [
-						{kind: "bootstrap.Button", type: "primary", content: "Post", onclick: "postItem"},
+						{kind: "bootstrap.Button", name: "postButton", type: "primary", content: "Post", onclick: "postItem"},
 					]},
 					//Floats screw up heights, so we manually add the padding:
 					{style: "height: 19px;"}
@@ -76,6 +80,8 @@ enyo.kind({
 			this.swapView();
 		};
 		
+		this.applyStyle("width", this.width);
+		
 		this.$.avatar.setSrc("https://api.villo.me/avatar.php?thumbnail=true&username=" + escape(villo.user.getUsername()));
 	},
 	swapView: function(){
@@ -93,8 +99,10 @@ enyo.kind({
 		}
 	},
 	postItem: function(){
-		console.log("posting...");
-		return true;
+		this.$.postButton.startLoad("Posting...");
+		window.setTimeout(enyo.bind(this, function(){
+			this.$.postButton.reset();
+		}), 500);
 	}
 })
 
