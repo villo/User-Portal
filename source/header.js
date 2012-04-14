@@ -132,23 +132,27 @@ enyo.kind({
 		this.inherited(arguments);
 		$("#" + this.$.userSearch.id).typeahead({
 			source: function( typeahead, query ) {
-				var suggest = villo.suggest.username({
-					username: query,
-					callback: enyo.bind(this, function(inSender){
-						if(inSender && inSender.profile){
-							//Build suggestions based on return.
-							var sourceBlock = [];
-							
-							enyo.forEach(inSender.profile, function(x){
-								sourceBlock.push(x.username);
-							});
-							
-							typeahead.process(sourceBlock);
-						}else{
-							typeahead.process([]);
-						}
-					})
-				});
+				if(villo && villo.suggest){
+					var suggest = villo.suggest.username({
+						username: query,
+						callback: enyo.bind(this, function(inSender){
+							if(inSender && inSender.profile){
+								//Build suggestions based on return.
+								var sourceBlock = [];
+								
+								enyo.forEach(inSender.profile, function(x){
+									sourceBlock.push(x.username);
+								});
+								
+								typeahead.process(sourceBlock);
+							}else{
+								typeahead.process([]);
+							}
+						})
+					});
+				}else{
+					typeahead.process([]);
+				}
 			},
 			onselect: enyo.bind(this, function(){
 				for(x in this.$.nav.getControls()){

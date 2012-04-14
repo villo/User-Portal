@@ -59,7 +59,7 @@ enyo.kind({
 				]},
 				{tag: "form", showing: false, name: "form", classes: "well", components: [
 					{classes: "close", tag: "a", allowHtml: true, content: "&times;", style: "height: 0px; margin-top: -15px; margin-right: -15px;", onclick: "swapView"},
-					{tag: "textarea", name: "area", classes: "input-xlarge", style: "resize: none; width: 330px;"},
+					{kind: "TextArea", name: "area", classes: "input-xlarge", style: "resize: none; width: 330px;"},
 					{classes: "pull-right", components: [
 						{kind: "bootstrap.Button", name: "postButton", type: "primary", content: "Post", onclick: "postItem"},
 					]},
@@ -69,14 +69,14 @@ enyo.kind({
 			]},
 		]}
 	],
-	create: function(){
+	rendered: function(){
 		this.inherited(arguments);
 		
 		this.$.input.setAttribute("placeholder", this.placeholder);
 		this.$.area.setAttribute("placeholder", this.placeholder);
 		
 		if(this.content !== ""){
-			this.$.area.setContent(this.content);
+			this.$.area.setValue(this.content);
 			this.swapView();
 		};
 		
@@ -92,7 +92,7 @@ enyo.kind({
 			this.$.area.hasNode().focus();
 		}else{
 			this.expanded = false;
-			this.$.area.hasNode().value = "";
+			this.$.area.setValue("");
 			this.$.area.hasNode().blur();
 			this.$.placeholder.setShowing(true);
 			this.$.form.setShowing(false);
@@ -100,9 +100,14 @@ enyo.kind({
 	},
 	postItem: function(){
 		this.$.postButton.startLoad("Posting...");
-		window.setTimeout(enyo.bind(this, function(){
-			this.$.postButton.reset();
-		}), 500);
+		villo.feeds.post({
+			description: this.$.area.getValue(),
+			callback: enyo.bind(this, function(){
+				this.$.postButton.reset();
+				this.$.area.setValue();
+				this.swapView();
+			})
+		});
 	}
 })
 
