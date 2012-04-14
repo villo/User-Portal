@@ -2,55 +2,9 @@ enyo.kind({
 	name: "homePage",
 	kind: "Page",
 	components: [
-		{tag: "h6", content: "Real-time Updates"},
-		{tag: "hr", style: "margin: 9px 0;"},
 		{classes: "row", components: [
 			{classes: "span3", components: [
-				//Nav option 1:
-				{classes: "well", style: "padding: 8px 0;", components: [
-					{tag: "ul", classes: "nav nav-list", components: [
-						{tag: "li", classes: "nav-header", content: "Some Navigation"},
-						{tag: "li", classes: "active", components: [
-							{tag: "a", components: [
-								{tag: "i", classes: "icon-th-list icon-white"},
-								{tag: "span", content: " Live Feed"}
-							]},
-						]},
-						{tag: "li", components: [
-							{tag: "a", components: [
-								{tag: "i", classes: "icon-user"},
-								{tag: "span", content: " Friends"}
-							]},
-						]},
-						{tag: "li", components: [
-							{tag: "a", components: [
-								{tag: "i", classes: "icon-comment"},
-								{tag: "span", content: " Something Else"}
-							]},
-						]},
-						{tag: "li", components: [
-							{tag: "a", components: [
-								{tag: "i", classes: "icon-search"},
-								{tag: "span", content: " Search"}
-							]},
-						]},
-					]}
-				]},
-				//Nav option 2:
-				{components: [
-					{tag: "h6", content: "Some Navigation"},
-					{tag: "ul", classes: "nav nav-tabs nav-stacked", components: [
-						{tag: "li", classes: "active", components: [
-							{tag: "a", content: "Home"},
-						]},
-						{tag: "li", components: [
-							{tag: "a", content: "Friends"},
-						]},
-						{tag: "li", components: [
-							{tag: "a", content: "Other Action"},
-						]},
-					]}
-				]}
+				{kind: "homePageNavigation"}
 			]},
 			{classes: "span9", components: [
 				{kind: "Poster"},
@@ -86,6 +40,67 @@ enyo.kind({
 		};
 		//Set up "timeago", which manages our timestamps:
 		jQuery("span.timeago").timeago();
+	}
+});
+
+enyo.kind({
+	name: "homePageNavigation",
+	kind: "Control",
+	active: "feed",
+	components: [
+		{classes: "well", style: "padding: 8px 0;", components: [
+			{tag: "ul", classes: "nav nav-list", components: [
+				{tag: "li", classes: "nav-header", content: "Real-Time Updates"},
+				{name: "feed", kind: "homePageNavigationItem", content: "Live Feed", icon: "th-list", active: true, onclick: "setActive"},
+				{name: "friends", kind: "homePageNavigationItem", content: "Friends", icon: "user", onclick: "setActive"},
+				{name: "apps", kind: "homePageNavigationItem", content: "Apps", icon: "pencil", onclick: "setActive"},
+				{tag: "li", classes: "divider"},
+				{name: "search", kind: "homePageNavigationItem", content: "Search", icon: "search", onclick: "setActive"},
+			]}
+		]}
+	],
+	setActive: function(inSender){
+		this.$[this.active].setActive(false);
+		this.active = inSender.name;
+		this.$[this.active].setActive(true);
+	}
+});
+
+enyo.kind({
+	name: "homePageNavigationItem",
+	tag: "li",
+	style: "cursor: pointer;",
+	published: {
+		active: false,
+		content: "",
+		icon: "",
+	},
+	components: [
+		{tag: "a", components: [
+			{tag: "i", name: "icon"},
+			{tag: "span", name: "content", content: ""}
+		]},
+	],
+	setActive: function(inSender){
+		if(inSender === true){
+			this.addClass("active");
+			this.$.icon.addClass("icon-white");
+		}else if(inSender === false){
+			this.removeClass("active");
+			this.$.icon.removeClass("icon-white");
+		}
+	},
+	create: function(){
+		this.inherited(arguments);
+		if(this.icon !== ""){
+			this.content = " " + this.content;
+			this.$.icon.addClass("icon-" + this.icon);
+		}
+		if(this.active === true){
+			this.$.icon.addClass("icon-white");
+			this.addClass("active")
+		}
+		this.$.content.setContent(this.content);
 	}
 });
 
