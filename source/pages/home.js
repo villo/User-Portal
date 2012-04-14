@@ -2,7 +2,6 @@ enyo.kind({
 	name: "homePage",
 	kind: "Page",
 	components: [
-		{kind: "Poster"},
 		{tag: "h6", content: "Real-time Updates"},
 		{tag: "hr", style: "margin: 9px 0;"},
 		{classes: "row", components: [
@@ -24,6 +23,7 @@ enyo.kind({
 				]},
 				//Nav option 2:
 				{components: [
+					{tag: "h6", content: "Some Navigation"},
 					{tag: "ul", classes: "nav nav-tabs nav-stacked", components: [
 						{tag: "li", classes: "active", components: [
 							{tag: "a", content: "Home"},
@@ -38,17 +38,17 @@ enyo.kind({
 				]}
 			]},
 			{classes: "span9", components: [
-				{kind: "homePageItem", content: "Whuddup"},
-				{kind: "homePageItem", content: "Whuddup 2"},
-				{kind: "homePageItem", content: "Something else"},
-				{kind: "homePageItem", content: "What could this be?"},
-				{kind: "homePageItem", content: "Oh baby!"}
+				{kind: "Poster"},
+				{name: "posts", components: [
+				
+				]}
 			]}
 		]},
 		//Old:
-		{classes: "row", name: "posts", components: [
+		/*{classes: "row", name: "posts", components: [
 			//Populated auto-magically.
 		]}
+		*/
 	],
 	rendered: function(){
 		this.inherited(arguments);
@@ -62,13 +62,12 @@ enyo.kind({
 		})
 	},
 	gotAction: function(inSender){
-		this.$.posts.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username, span: 6});
-		this.$.posts.render();
+		this.$.posts.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
 		jQuery("span.timeago").timeago();
 	},
 	gotHistory: function(inSender){
 		for(var x in inSender){
-			this.$.posts.createComponent({kind: "homePageItem", content: inSender[x].description, timestamp: inSender[x].timestamp, username: inSender[x].username, span: 6}).render();
+			this.$.posts.createComponent({kind: "homePageItem", content: inSender[x].description, timestamp: inSender[x].timestamp, username: inSender[x].username}).render();
 		};
 		//Set up "timeago", which manages our timestamps:
 		jQuery("span.timeago").timeago();
@@ -165,10 +164,10 @@ enyo.kind({
 	style: "margin-bottom: 10px; display: none;",
 	components: [
 		{classes: "row-fluid", components: [
-			{classes: "span2", components: [
+			{classes: "pull-left", style: "width: 60px; height: 60px;", components: [
 				{classes: "thumbnail", name: "avatar", style: "height: 50px; width: 50px;", tag: "img", src: "source/img/ajax-loader.gif"}
 			]},
-			{classes: "span10", components: [
+			{classes: "pull-right", style: "width: 620px;", components: [
 				{classes: "pull-right btn-group", components: [
 					{kind: "Button", classes: "btn btn-mini dropdown-toggle", attributes: {"data-toggle": "dropdown"}, components: [
 						{tag: "span", classes: "caret"}
