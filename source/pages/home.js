@@ -164,7 +164,7 @@ enyo.kind({
 	style: "margin-bottom: 10px; display: none;",
 	components: [
 		{classes: "row-fluid", components: [
-			{classes: "pull-left", style: "width: 60px; height: 60px;", components: [
+			{classes: "pull-left", style: "width: 60px;", components: [
 				{classes: "thumbnail", name: "avatar", style: "height: 50px; width: 50px;", tag: "img", src: "source/img/ajax-loader.gif"}
 			]},
 			{classes: "pull-right", style: "width: 620px;", components: [
