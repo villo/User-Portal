@@ -1,6 +1,9 @@
 enyo.kind({
 	name: "homePage",
 	kind: "Page",
+	handlers: {
+		onPageChange: "changePage"
+	},
 	components: [
 		{classes: "row", components: [
 			{classes: "span3", components: [
@@ -8,38 +11,13 @@ enyo.kind({
 			]},
 			{classes: "span9", components: [
 				{kind: "Poster"},
-				{name: "posts", components: [
-				
-				]}
+				//Super Class:
+				{kind: "homePageSuperClass"}
 			]}
-		]},
-		//Old:
-		/*{classes: "row", name: "posts", components: [
-			//Populated auto-magically.
 		]}
-		*/
 	],
-	rendered: function(){
-		this.inherited(arguments);
-		//Call feed history:
-		villo.feeds.history({
-			callback: enyo.bind(this, this.gotHistory)
-		});
-		//Listen: 
-		villo.feeds.listen({
-			callback: enyo.bind(this, this.gotAction)
-		})
-	},
-	gotAction: function(inSender){
-		this.$.posts.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
-		jQuery("span.timeago").timeago();
-	},
-	gotHistory: function(inSender){
-		for(var x in inSender){
-			this.$.posts.createComponent({kind: "homePageItem", content: inSender[x].description, timestamp: inSender[x].timestamp, username: inSender[x].username}).render();
-		};
-		//Set up "timeago", which manages our timestamps:
-		jQuery("span.timeago").timeago();
+	changePage: function(inSender, inEvent){
+		this.$.homePageSuperClass.changePage(inEvent);
 	}
 });
 
@@ -63,6 +41,7 @@ enyo.kind({
 		this.$[this.active].setActive(false);
 		this.active = inSender.name;
 		this.$[this.active].setActive(true);
+		this.bubble("onPageChange", this.active);
 	}
 });
 
@@ -178,4 +157,87 @@ enyo.kind({
 			$("#" + this.id).css("display", "block");
 		}
 	}
+});
+
+
+/*
+ * Home Page Super-Class
+ * =====================
+ * 
+ * This is the kind that holds the book for the different feeds on the home page.
+ */
+
+enyo.kind({
+	name: "homePageSuperClass",
+	components: [
+		{kind: "Book", components: [
+			{name: "feed", kind: "homePageFeed"},
+			{name: "friends", kind: "homePageFriend"},
+			{name: "apps", kind: "homePageFriend"},
+			{name: "search", kind: "homePageSearch"},
+		]}
+	],
+	rendered: function(){
+		/*
+		 * We need a global listen function, because we can only listen to one room at a time.
+		 * This function deploys all retrieved messages to all clients, so they can manage it how they want to.
+		 */
+		villo.feeds.listen({
+			callback: enyo.bind(this, this.deploy)
+		});
+	},
+	deploy: function(inSender){
+		var c = this.$.book.getControls();
+		for(var x in c){
+			c[x].action(inSender);
+		}
+	},
+	changePage: function(inSender){
+		this.page = inSender;
+		this.$.book.pageName(this.page);
+	}
+});
+//Feed page:
+enyo.kind({
+	name: "homePageFeed",
+	components: [
+	
+	],
+	action: function(inSender){
+		this.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
+		jQuery("span.timeago").timeago();
+	},
+	rendered: function(){
+		this.inherited(arguments);
+		
+	}
+});
+//Friend page:
+enyo.kind({
+	name: "homePageFriend",
+	components: [
+		
+	],
+	friends: [],
+	action: function(inSender){
+		this.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
+		jQuery("span.timeago").timeago();
+	},
+	rendered: function(){
+		this.inherited(arguments);
+		villo.friends.get({
+			callback: enyo.bind(this, function(inSender){
+				this.friends = inSender.friends || [];
+			})
+		});
+	}
+});
+//Search page:
+enyo.kind({
+	name: "homePageSearch",
+	components: [
+	
+	],
+	action: function(){},
+	activate: function(){}
 });
