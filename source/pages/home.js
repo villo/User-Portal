@@ -5,6 +5,47 @@ enyo.kind({
 		{kind: "Poster"},
 		{tag: "h6", content: "Real-time Updates"},
 		{tag: "hr", style: "margin: 9px 0;"},
+		{classes: "row", components: [
+			{classes: "span3", components: [
+				//Nav option 1:
+				{classes: "well", style: "padding: 8px 0;", components: [
+					{tag: "ul", classes: "nav nav-list", components: [
+						{tag: "li", classes: "nav-header", content: "Some Navigation"},
+						{tag: "li", classes: "active", components: [
+							{tag: "a", content: "Home"},
+						]},
+						{tag: "li", components: [
+							{tag: "a", content: "Friends"},
+						]},
+						{tag: "li", components: [
+							{tag: "a", content: "Other Action"},
+						]},
+					]}
+				]},
+				//Nav option 2:
+				{components: [
+					{tag: "ul", classes: "nav nav-tabs nav-stacked", components: [
+						{tag: "li", classes: "active", components: [
+							{tag: "a", content: "Home"},
+						]},
+						{tag: "li", components: [
+							{tag: "a", content: "Friends"},
+						]},
+						{tag: "li", components: [
+							{tag: "a", content: "Other Action"},
+						]},
+					]}
+				]}
+			]},
+			{classes: "span9", components: [
+				{kind: "homePageItem", content: "Whuddup"},
+				{kind: "homePageItem", content: "Whuddup 2"},
+				{kind: "homePageItem", content: "Something else"},
+				{kind: "homePageItem", content: "What could this be?"},
+				{kind: "homePageItem", content: "Oh baby!"}
+			]}
+		]},
+		//Old:
 		{classes: "row", name: "posts", components: [
 			//Populated auto-magically.
 		]}
@@ -21,13 +62,13 @@ enyo.kind({
 		})
 	},
 	gotAction: function(inSender){
-		this.$.posts.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username});
+		this.$.posts.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username, span: 6});
 		this.$.posts.render();
 		jQuery("span.timeago").timeago();
 	},
 	gotHistory: function(inSender){
 		for(var x in inSender){
-			this.$.posts.createComponent({kind: "homePageItem", content: inSender[x].description, timestamp: inSender[x].timestamp, username: inSender[x].username}).render();
+			this.$.posts.createComponent({kind: "homePageItem", content: inSender[x].description, timestamp: inSender[x].timestamp, username: inSender[x].username, span: 6}).render();
 		};
 		//Set up "timeago", which manages our timestamps:
 		jQuery("span.timeago").timeago();
@@ -116,7 +157,7 @@ enyo.kind({
 	kind: "Control",
 	prepend: true,
 	published: {
-		"span": 6,
+		"span": false,
 		"content": "",
 		"username": "Guest",
 		"timestamp": enyo.now()
@@ -167,7 +208,9 @@ enyo.kind({
 	},
 	create: function(){
 		this.inherited(arguments);
-		this.addClass("span" + this.span);
+		if(this.span){
+			this.addClass("span" + this.span);
+		}
 		this.$.content.setContent(this.content);
 		this.$.username.setContent(this.username);
 		this.$.avatar.setSrc("https://api.villo.me/avatar.php?thumbnail=true&username=" + escape(this.username));
