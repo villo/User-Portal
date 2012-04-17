@@ -11,6 +11,7 @@ enyo.kind({
 			]},
 			{classes: "span9", components: [
 				{kind: "Poster"},
+				{tag: "hr", style: ""},
 				//Super Class:
 				{kind: "homePageSuperClass"}
 			]}
@@ -93,6 +94,10 @@ enyo.kind({
 		"username": "Guest",
 		"timestamp": enyo.now()
 	},
+	handlers: {
+		onmouseover: "mouseOver",
+		onmouseout: "mouseOut"
+	},
 	style: "margin-bottom: 10px; display: none;",
 	components: [
 		{classes: "row-fluid", components: [
@@ -101,7 +106,7 @@ enyo.kind({
 			]},
 			{classes: "pull-right", style: "width: 620px;", components: [
 				{classes: "pull-right btn-group", components: [
-					{kind: "Button", classes: "btn btn-mini dropdown-toggle", attributes: {"data-toggle": "dropdown"}, components: [
+					{kind: "Button", name: "dropdownButton", classes: "btn btn-mini dropdown-toggle", attributes: {"data-toggle": "dropdown"}, components: [
 						{tag: "span", classes: "caret"}
 					]},
 					{tag: "ul", classes: "dropdown-menu", components: [
@@ -124,6 +129,12 @@ enyo.kind({
 			]},
 		]}
 	],
+	mouseOver: function(){
+		this.$.dropdownButton.applyStyle("opacity", 1);
+	},
+	mouseOut: function(){
+		this.$.dropdownButton.applyStyle("opacity", 0.5);
+	},
 	hidePost: function(){
 		/*
 		 * TODO: Should we do something more with this? Add it to some sort of Array of items we don't want to see?
@@ -147,6 +158,8 @@ enyo.kind({
 		this.$.avatar.setSrc("https://api.villo.me/avatar.php?thumbnail=true&username=" + escape(this.username));
 		this.$.timestamp.setAttribute("title", new Date(this.timestamp).toISOString());
 		jQuery("#" + this.id).timeago();
+		
+		this.$.dropdownButton.applyStyle("opacity", 0.5);
 	},
 	rendered: function(){
 		this.inherited(arguments);
@@ -166,7 +179,6 @@ enyo.kind({
  * 
  * This is the kind that holds the book for the different feeds on the home page.
  */
-
 enyo.kind({
 	name: "homePageSuperClass",
 	components: [
@@ -197,6 +209,7 @@ enyo.kind({
 		this.$.book.pageName(this.page);
 	}
 });
+
 //Feed page:
 enyo.kind({
 	name: "homePageFeed",
@@ -207,11 +220,26 @@ enyo.kind({
 		this.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
 		jQuery("span.timeago").timeago();
 	},
-	rendered: function(){
+	create: function(){
 		this.inherited(arguments);
-		
+		villo.feeds.history({
+			type: "public",
+			callback: enyo.bind(this,function(inSender){
+				if(inSender && inSender.feeds){
+					//We use prepending, so we need it in reverse order:
+					inSender.feeds = inSender.feeds.reverse();
+					for(var x in inSender.feeds){
+						if(inSender.feeds.hasOwnProperty(x)){
+							inSender.feeds[x].timestamp = parseInt(inSender.feeds[x].timestamp, 10);
+							this.action(inSender.feeds[x]);
+						}
+					}
+				}
+			})
+		});
 	}
 });
+
 //Friend page:
 enyo.kind({
 	name: "homePageFriend",
@@ -220,14 +248,39 @@ enyo.kind({
 	],
 	friends: [],
 	action: function(inSender){
-		this.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
-		jQuery("span.timeago").timeago();
+		var isFriend = false;
+		for(var x in this.friends){
+			if(this.friends.hasOwnProperty(x)){
+				if(this.friends[x].toLowerCase() === inSender.username.toLowerCase()){
+					isFriend = true;
+				}
+			}
+		}
+		if(isFriend === true){
+			this.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
+			jQuery("span.timeago").timeago();
+		}
 	},
-	rendered: function(){
+	create: function(){
 		this.inherited(arguments);
 		villo.friends.get({
 			callback: enyo.bind(this, function(inSender){
 				this.friends = inSender.friends || [];
+			})
+		});
+		villo.feeds.history({
+			type: "friends",
+			callback: enyo.bind(this,function(inSender){
+				if(inSender && inSender.feeds){
+					//We use prepending, so we need it in reverse order:
+					inSender.feeds = inSender.feeds.reverse();
+					for(var x in inSender.feeds){
+						if(inSender.feeds.hasOwnProperty(x)){
+							inSender.feeds[x].timestamp = parseInt(inSender.feeds[x].timestamp, 10);
+							this.action(inSender.feeds[x]);
+						}
+					}
+				}
 			})
 		});
 	}

@@ -17,18 +17,18 @@ enyo.kind({
 				{classes: "thumbnail", name: "avatar", style: "height: 58px; width: 58px;", tag: "img", src: ""}
 			]},
 			{classes: "span10", components: [
-				{name: "placeholder", classes: "well", showing: true, onclick: "swapView", components: [
-					{tag: "input", name: "input", style: "margin-bottom: 0px;"},
+				{name: "placeholder", classes: "well", style: "margin-bottom: 0px;", showing: true, onclick: "swapView", components: [
+					{tag: "input", name: "input", classes: "input-large", style: "margin-bottom: 0px;"},
 					{kind: "bootstrap.Button", content: "New Post", classes: "pull-right"},
 				]},
-				{tag: "form", showing: false, name: "form", classes: "well", components: [
+				{tag: "form", showing: false, name: "form", style: "margin-bottom: 0px;", classes: "well", components: [
 					{classes: "close", tag: "a", allowHtml: true, content: "&times;", style: "height: 0px; margin-top: -15px; margin-right: -15px;", onclick: "swapView"},
 					{kind: "TextArea", name: "area", classes: "input-xlarge", style: "resize: none; width: 330px;"},
 					{classes: "pull-right", components: [
 						{kind: "bootstrap.Button", name: "postButton", type: "primary", content: "Post", onclick: "postItem"},
 					]},
 					//Floats screw up heights, so we manually add the padding:
-					{style: "height: 19px;"}
+					{style: "height: 20px;"}
 				]}
 			]},
 		]}
