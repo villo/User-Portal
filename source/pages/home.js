@@ -13,10 +13,13 @@ enyo.kind({
 				{kind: "Poster"},
 				{tag: "hr", style: ""},
 				//Super Class:
-				{kind: "homePageSuperClass"}
+				{kind: "homePageSuperClass", onNotify: "handleNotify"}
 			]}
 		]}
 	],
+	handleNotify: function(inSender, inEvent){
+		this.waterfall("onNewAlert", inEvent);
+	},
 	changePage: function(inSender, inEvent){
 		this.$.homePageSuperClass.changePage(inEvent);
 	}
@@ -32,7 +35,7 @@ enyo.kind({
 				{tag: "li", classes: "nav-header", content: "Real-Time Updates"},
 				{name: "feed", kind: "homePageNavigationItem", content: "Live Feed", icon: "th-list", active: true, onclick: "setActive"},
 				{name: "friends", kind: "homePageNavigationItem", content: "Friends", icon: "user", onclick: "setActive"},
-				{name: "apps", kind: "homePageNavigationItem", content: "Apps", icon: "pencil", onclick: "setActive"},
+				//{name: "apps", kind: "homePageNavigationItem", content: "Apps", icon: "pencil", onclick: "setActive"},
 				{tag: "li", classes: "divider"},
 				{name: "search", kind: "homePageNavigationItem", content: "Search", icon: "search", onclick: "setActive"},
 			]}
@@ -55,20 +58,49 @@ enyo.kind({
 		content: "",
 		icon: "",
 	},
+	handlers: {
+		onNewAlert: "handleAlert"
+	},
+	alerts: 0,
 	components: [
 		{tag: "a", components: [
 			{tag: "i", name: "icon"},
-			{tag: "span", name: "content", content: ""}
+			{tag: "span", name: "content", content: ""},
+			{classes: "pull-right", name: "notif", showing: true, components: [
+				{tag: "span", name: "notification", showing: false, classes: "badge badge-inverse", content: ""}
+			]}
 		]},
 	],
 	setActive: function(inSender){
 		if(inSender === true){
 			this.addClass("active");
 			this.$.icon.addClass("icon-white");
+			this.$.notif.setShowing(false);
 		}else if(inSender === false){
 			this.removeClass("active");
 			this.$.icon.removeClass("icon-white");
+			this.$.notif.setShowing(true);
 		}
+		this.clear();
+	},
+	handleAlert: function(inSender, inEvent){
+		if(this.name.toLowerCase() === inEvent.toLowerCase()){
+			this.notify();
+		}
+	},
+	notify: function(){
+		this.alerts = this.alerts + 1;
+		if(this.alerts >= 1){
+			this.$.notification.setShowing(true);
+			this.$.notification.setContent(this.alerts);
+		}else{
+			this.$.notification.setShowing(false);
+		}
+	},
+	clear: function(){
+		//Reset
+		this.alerts = -1;
+		this.notify();
 	},
 	create: function(){
 		this.inherited(arguments);
@@ -77,8 +109,7 @@ enyo.kind({
 			this.$.icon.addClass("icon-" + this.icon);
 		}
 		if(this.active === true){
-			this.$.icon.addClass("icon-white");
-			this.addClass("active")
+			this.setActive(true);
 		}
 		this.$.content.setContent(this.content);
 	}
@@ -185,7 +216,7 @@ enyo.kind({
 		{kind: "Book", components: [
 			{name: "feed", kind: "homePageFeed"},
 			{name: "friends", kind: "homePageFriend"},
-			{name: "apps", kind: "homePageFriend"},
+			//{name: "apps", kind: "homePageFriend"},
 			{name: "search", kind: "homePageSearch"},
 		]}
 	],
@@ -216,7 +247,10 @@ enyo.kind({
 	components: [
 	
 	],
-	action: function(inSender){
+	action: function(inSender, isHistory){
+		if(!isHistory || isHistory !== true){
+			this.bubble("onNotify", "feed");
+		}
 		this.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
 		jQuery("span.timeago").timeago();
 	},
@@ -224,6 +258,7 @@ enyo.kind({
 		this.inherited(arguments);
 		villo.feeds.history({
 			type: "public",
+			limit: 50,
 			callback: enyo.bind(this,function(inSender){
 				if(inSender && inSender.feeds){
 					//We use prepending, so we need it in reverse order:
@@ -231,7 +266,7 @@ enyo.kind({
 					for(var x in inSender.feeds){
 						if(inSender.feeds.hasOwnProperty(x)){
 							inSender.feeds[x].timestamp = parseInt(inSender.feeds[x].timestamp, 10);
-							this.action(inSender.feeds[x]);
+							this.action(inSender.feeds[x], true);
 						}
 					}
 				}
@@ -247,7 +282,7 @@ enyo.kind({
 		
 	],
 	friends: [],
-	action: function(inSender){
+	action: function(inSender, isHistory){
 		var isFriend = false;
 		for(var x in this.friends){
 			if(this.friends.hasOwnProperty(x)){
@@ -257,6 +292,9 @@ enyo.kind({
 			}
 		}
 		if(isFriend === true){
+			if(!isHistory || isHistory !== true){
+				this.bubble("onNotify", "friends");
+			}
 			this.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
 			jQuery("span.timeago").timeago();
 		}
@@ -270,6 +308,7 @@ enyo.kind({
 		});
 		villo.feeds.history({
 			type: "friends",
+			limit: 50,
 			callback: enyo.bind(this,function(inSender){
 				if(inSender && inSender.feeds){
 					//We use prepending, so we need it in reverse order:
@@ -277,7 +316,7 @@ enyo.kind({
 					for(var x in inSender.feeds){
 						if(inSender.feeds.hasOwnProperty(x)){
 							inSender.feeds[x].timestamp = parseInt(inSender.feeds[x].timestamp, 10);
-							this.action(inSender.feeds[x]);
+							this.action(inSender.feeds[x], true);
 						}
 					}
 				}
@@ -291,6 +330,10 @@ enyo.kind({
 	components: [
 	
 	],
-	action: function(){},
-	activate: function(){}
+	action: function(){
+		
+	},
+	create: function(){
+		
+	}
 });

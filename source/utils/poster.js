@@ -65,6 +65,7 @@ enyo.kind({
 	postItem: function(){
 		this.$.postButton.startLoad("Posting...");
 		villo.feeds.post({
+			action: "user-post",
 			description: this.$.area.getValue(),
 			callback: enyo.bind(this, function(){
 				this.$.postButton.reset();
