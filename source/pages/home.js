@@ -37,7 +37,7 @@ enyo.kind({
 				{name: "friends", kind: "homePageNavigationItem", content: "Friends", icon: "user", onclick: "setActive"},
 				//{name: "apps", kind: "homePageNavigationItem", content: "Apps", icon: "pencil", onclick: "setActive"},
 				{tag: "li", classes: "divider"},
-				{name: "search", kind: "homePageNavigationItem", content: "Search", icon: "search", onclick: "setActive"},
+				{name: "searcher", kind: "homePageNavigationItem", content: "Search", icon: "search", onclick: "setActive"},
 			]}
 		]}
 	],
@@ -132,7 +132,7 @@ enyo.kind({
 	style: "margin-bottom: 10px; display: none;",
 	components: [
 		{classes: "row-fluid", components: [
-			{classes: "pull-left", style: "width: 60px;", components: [
+			{classes: "pull-left", style: "width: 60px; cursor: pointer;", onclick: "viewProfile", components: [
 				{classes: "thumbnail", name: "avatar", style: "height: 50px; width: 50px;", tag: "img", src: "source/img/ajax-loader.gif"}
 			]},
 			{classes: "pull-right", style: "width: 620px;", components: [
@@ -216,8 +216,7 @@ enyo.kind({
 		{kind: "Book", components: [
 			{name: "feed", kind: "homePageFeed"},
 			{name: "friends", kind: "homePageFriend"},
-			//{name: "apps", kind: "homePageFriend"},
-			{name: "search", kind: "homePageSearch"},
+			{name: "searcher", kind: "homePageSearch"}
 		]}
 	],
 	rendered: function(){
@@ -324,16 +323,33 @@ enyo.kind({
 		});
 	}
 });
+
 //Search page:
 enyo.kind({
 	name: "homePageSearch",
 	components: [
-	
+		{tag: "form", classes: "form-search", components: [
+			{kind: "Input", name: "input", attributes: {"type": "text", "placeholder": "Search for anything..."}, classes: "input-xlarge search-query", style: "margin-right: 8px;"},
+			{kind: "bootstrap.Button", name: "searchButton", content: "Search", onclick: "handleSearch"}
+		]},
+		{tag: "hr"},
+		{content: "Stuff will go here."}
 	],
+	handleSearch: function(){
+		this.$.searchButton.loading("Searching...");
+		var val = this.$.input.getValue();
+		console.log(val);
+		villo.feeds.search({
+			text: val,
+			callback: enyo.bind(this, function(){
+				this.$.searchButton.reset();
+			})
+		});
+	},
 	action: function(){
 		
 	},
 	create: function(){
-		
+		this.inherited(arguments);
 	}
 });

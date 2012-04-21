@@ -40,6 +40,10 @@ enyo.kind({
 		
 		this.$.content.setContent(this.content);
 	},
+	loading: function(inSender){
+		//Push off to the startLoad method:
+		this.startLoad(inSender);
+	},
 	startLoad: function(inSender){
 		//We use our own loading text system:
 		//Bootstrap's is cool, but doesn't support icons, and the reset function is fussy.
