@@ -142,12 +142,15 @@ enyo.kind({
 					]},
 					{tag: "ul", classes: "dropdown-menu", components: [
 						{tag: "li", components: [
-							{tag: "a", content: "View Profile", onclick: "viewProfile"}
+							{tag: "a", content: "Repost", onclick: "repost"}
 						]},
+						{tag: "li", classes: "divider"},
 						{tag: "li", components: [
 							{tag: "a", content: "Hide Post", onclick: "hidePost"}
 						]},
-						{tag: "li", classes: "divider"},
+						{tag: "li", components: [
+							{tag: "a", content: "View Profile", onclick: "viewProfile"}
+						]},
 						{tag: "li", components: [
 							{tag: "a", content: "View App", onclick: "viewApp"}
 						]},
@@ -158,8 +161,20 @@ enyo.kind({
 				//Timestamp:
 				{tag: "span", classes: "timeago pull-right", style: "font-size: 11px; color: #999;", name: "timestamp", content: ""}
 			]},
+		]},
+		{kind: "Modal", keyboard: true, components: [
+			{kind: "ModalHeader", content: 'Reposting "Kesne"', closeButton: true},
+			{kind: "ModalBody", style: "padding-left: 30px;", components: [
+				{kind: "Poster", name: "repost", content: " ", onPostDone: "doneRepost", repost: true, cancel: false}
+			]},
 		]}
 	],
+	doneRepost: function(){
+		this.$.modal.hide();
+	},
+	repost: function(){
+		this.$.modal.show();
+	},
 	mouseOver: function(){
 		this.$.dropdownButton.applyStyle("opacity", 1);
 	},
@@ -189,7 +204,7 @@ enyo.kind({
 		this.$.avatar.setSrc("https://api.villo.me/avatar.php?thumbnail=true&username=" + escape(this.username));
 		this.$.timestamp.setAttribute("title", new Date(this.timestamp).toISOString());
 		jQuery("#" + this.id).timeago();
-		
+		this.$.repost.replaceContent(this.content);
 		this.$.dropdownButton.applyStyle("opacity", 0.5);
 	},
 	rendered: function(){
@@ -303,22 +318,22 @@ enyo.kind({
 		villo.friends.get({
 			callback: enyo.bind(this, function(inSender){
 				this.friends = inSender.friends || [];
-			})
-		});
-		villo.feeds.history({
-			type: "friends",
-			limit: 50,
-			callback: enyo.bind(this,function(inSender){
-				if(inSender && inSender.feeds){
-					//We use prepending, so we need it in reverse order:
-					inSender.feeds = inSender.feeds.reverse();
-					for(var x in inSender.feeds){
-						if(inSender.feeds.hasOwnProperty(x)){
-							inSender.feeds[x].timestamp = parseInt(inSender.feeds[x].timestamp, 10);
-							this.action(inSender.feeds[x], true);
+				villo.feeds.history({
+					type: "friends",
+					limit: 50,
+					callback: enyo.bind(this,function(inSender){
+						if(inSender && inSender.feeds){
+							//We use prepending, so we need it in reverse order:
+							inSender.feeds = inSender.feeds.reverse();
+							for(var x in inSender.feeds){
+								if(inSender.feeds.hasOwnProperty(x)){
+									inSender.feeds[x].timestamp = parseInt(inSender.feeds[x].timestamp, 10);
+									this.action(inSender.feeds[x], true);
+								}
+							}
 						}
-					}
-				}
+					})
+				});
 			})
 		});
 	}
