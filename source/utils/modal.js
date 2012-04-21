@@ -17,14 +17,20 @@ enyo.kind({
 			{name: "client"},
 		]},
 	],
+	setHeaderContent: function(inSender){
+		if(this.contentReference){
+			this.contentReference.setContent(inSender);
+		}
+	},
 	create: function(){
 		this.inherited(arguments);
 		this.$.closeButton.setShowing(this.closeButton);
 		if(this.$.client.children.length <= 0){
-			this.$.theHeader.createComponent({
+			this.contentReference = this.$.theHeader.createComponent({
 				tag: "h3", 
-				content: this.content
-			});
+				content: this.content,
+				name: "content"
+			}).render();
 		}
 	}
 });

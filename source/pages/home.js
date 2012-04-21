@@ -163,7 +163,7 @@ enyo.kind({
 			]},
 		]},
 		{kind: "Modal", keyboard: true, components: [
-			{kind: "ModalHeader", content: 'Reposting "Kesne"', closeButton: true},
+			{kind: "ModalHeader", name: "header", content: "", closeButton: true},
 			{kind: "ModalBody", style: "padding-left: 30px;", components: [
 				{kind: "Poster", name: "repost", content: " ", onPostDone: "doneRepost", repost: true, cancel: false}
 			]},
@@ -206,6 +206,7 @@ enyo.kind({
 		jQuery("#" + this.id).timeago();
 		this.$.repost.replaceContent(this.content);
 		this.$.dropdownButton.applyStyle("opacity", 0.5);
+		this.$.header.setHeaderContent('Reposting "' + this.username + '"');
 	},
 	rendered: function(){
 		this.inherited(arguments);
