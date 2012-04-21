@@ -20,6 +20,9 @@ enyo.kind({
 	],
 	create: function(){
 		this.inherited(arguments);
+		this.manageContent();
+	},
+	manageContent: function(){
 		if(this.type !== ""){
 			this.addClass("btn-" + this.type);
 		}
@@ -65,6 +68,14 @@ enyo.kind({
 		if(this.hasClass("disabled")){
 			return true;
 		}
+	},
+	props: function(inSender){
+		for(var x in inSender){
+			if(inSender.hasOwnProperty(x)){
+				this[x] = inSender[x];
+			}
+		}
+		this.manageContent();
 	},
 	disable: function(){
 		this.addClass("disabled");
