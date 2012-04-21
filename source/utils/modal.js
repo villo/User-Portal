@@ -1,9 +1,3 @@
-/*
- * TODO: Add in x-button published prop
- * Idea for settings: 
- * 		Use the left-hand side icon-driven navigation
- */
-
 enyo.kind({
 	name: "ModalHeader",
 	kind: "Control",

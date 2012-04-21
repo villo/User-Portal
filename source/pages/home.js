@@ -2,7 +2,8 @@ enyo.kind({
 	name: "homePage",
 	kind: "Page",
 	handlers: {
-		onPageChange: "changePage"
+		onPageChange: "changePage",
+		onRepost: "handleRepost"
 	},
 	components: [
 		{classes: "row", components: [
@@ -15,8 +16,23 @@ enyo.kind({
 				//Super Class:
 				{kind: "homePageSuperClass", onNotify: "handleNotify"}
 			]}
+		]},
+		{kind: "Modal", name: "reposter", keyboard: true, components: [
+			{kind: "ModalHeader", name: "repostheader", content: "", closeButton: true},
+			{kind: "ModalBody", style: "padding-left: 30px;", components: [
+				{kind: "Poster", name: "repost", content: " ", onPostDone: "doneRepost", repost: true, cancel: false}
+			]},
 		]}
 	],
+	handleRepost: function(inSender, inEvent){
+		this.$.repostheader.setHeaderContent('Reposting "' + inEvent.username + '"');
+		this.$.repostheader.render();
+		this.$.repost.replaceContent(inEvent.content);
+		this.$.reposter.show();
+	},
+	doneRepost: function(){
+		this.$.reposter.hide();
+	},
 	handleNotify: function(inSender, inEvent){
 		this.waterfall("onNewAlert", inEvent);
 	},
@@ -129,6 +145,9 @@ enyo.kind({
 		onmouseover: "mouseOver",
 		onmouseout: "mouseOut"
 	},
+	events: {
+		onRepost: ""
+	},
 	style: "margin-bottom: 10px; display: none;",
 	components: [
 		{classes: "row-fluid", components: [
@@ -161,19 +180,13 @@ enyo.kind({
 				//Timestamp:
 				{tag: "span", classes: "timeago pull-right", style: "font-size: 11px; color: #999;", name: "timestamp", content: ""}
 			]},
-		]},
-		{kind: "Modal", keyboard: true, components: [
-			{kind: "ModalHeader", name: "header", content: "", closeButton: true},
-			{kind: "ModalBody", style: "padding-left: 30px;", components: [
-				{kind: "Poster", name: "repost", content: " ", onPostDone: "doneRepost", repost: true, cancel: false}
-			]},
 		]}
 	],
-	doneRepost: function(){
-		this.$.modal.hide();
-	},
 	repost: function(){
-		this.$.modal.show();
+		this.bubble("onRepost", {
+			"username": this.username,
+			"content": this.content
+		});
 	},
 	mouseOver: function(){
 		this.$.dropdownButton.applyStyle("opacity", 1);
@@ -204,9 +217,8 @@ enyo.kind({
 		this.$.avatar.setSrc("https://api.villo.me/avatar.php?thumbnail=true&username=" + escape(this.username));
 		this.$.timestamp.setAttribute("title", new Date(this.timestamp).toISOString());
 		jQuery("#" + this.id).timeago();
-		this.$.repost.replaceContent(this.content);
+		
 		this.$.dropdownButton.applyStyle("opacity", 0.5);
-		this.$.header.setHeaderContent('Reposting "' + this.username + '"');
 	},
 	rendered: function(){
 		this.inherited(arguments);
