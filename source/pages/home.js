@@ -1,3 +1,10 @@
+/*
+ * TODO: Stylize reposts
+ * TODO: Functionalize search
+ * TODO: Serverize repost
+ * TODO: App pages
+ */
+
 enyo.kind({
 	name: "homePage",
 	kind: "Page",
