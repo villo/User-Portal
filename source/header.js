@@ -125,7 +125,9 @@ enyo.kind({
 				data: ""
 			});
 		}else if(inSender.action === "settings"){
-			this.$.settingsPage.open();
+			this.$.settingsPage.open("settings");
+		}else if(inSender.action === "apps"){
+			this.$.settingsPage.open("apps");
 		}
 	},
 	
