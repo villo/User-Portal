@@ -383,6 +383,8 @@ enyo.kind({
 			callback: enyo.bind(this, function(inSender){
 				this.$.searchResults.destroyComponents();
 				this.$.searchButton.reset();
+				//We use prepending, so we need it in reverse order:
+				inSender.feeds = inSender.feeds.reverse();
 				for(var x in inSender.feeds){
 					if(inSender.feeds.hasOwnProperty(x)){
 						inSender.feeds[x].timestamp = parseInt(inSender.feeds[x].timestamp, 10);
