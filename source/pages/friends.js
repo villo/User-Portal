@@ -1,6 +1,3 @@
-//TODO:
-//Add "Deleting..." text to delete friend button ontap.
-
 enyo.kind({
 	name: "friendsPage",
 	kind: "Page",
@@ -191,13 +188,14 @@ enyo.kind({
 			{name: "username", content: "", tag: "h3", style: "text-align: center;"},
 			{tag: "br"},
 		]},
+		//TODO: Drop this into a kind so that we can generate it on-the-fly.
 		{kind: "Modal", onclick: "stopTheProp", keyboard: true, background: false, components: [
 			{kind: "ModalHeader", content: "Delete Friend?"},
 			{kind: "ModalBody", components: [
 				{content: "", name: "replaceMe"}
 			]},
 			{kind: "ModalFooter", components: [
-				{tag: "a", classes: "btn btn-danger", content: "Delete Friend", onclick: "deleteTheFriend"},
+				{kind: "bootstrap.Button", name: "deleter", type: "danger", content: "Delete Friend", onclick: "deleteTheFriend"},
 				{tag: "a", classes: "btn", content: "Cancel", onclick: "closeModal"}
 			]}
 		]}
@@ -211,24 +209,27 @@ enyo.kind({
 	deleteFriend: function(iSender, inEvent){
 		this.handleDelete("empty", inEvent);
 		//Stop the event from reaching the catch-all click handler.
-		inEvent.stopPropagation();
 		return true;
 	},
 	stopTheProp: function(iSender, inEvent){
 		//There's a weird bug that causes the modal clicks to pass through, so we need to stop the event propagation.
-		inEvent.stopPropagation();
 		return true;
 	},
 	deleteTheFriend: function(){
+		this.$.deleter.loading("Deleting...");
 		villo.friends.remove({
 			username: this.deleteUsername,
 			callback: enyo.bind(this, this.propagateRemoval)
 		});
 	},
 	propagateRemoval: function(inData){
+		//Set button state
+		this.$.deleter.reset();
+		
 		//Instead of chaining events up, we'll just call the owner's functions directly.
 		this.$.modal.hide();
-		//Calling this will cause us to die!
+		
+		//Calling this will kill us:
 		window.setTimeout(enyo.bind(this, function(){
 			this.owner.owner.activate({existing: inData});
 		}), 100);
