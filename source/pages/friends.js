@@ -135,16 +135,11 @@ enyo.kind({
 		onBubble: ""
 	},
 	components: [
-		//
-		//TODO
-		//For some reason it didn't save the progress on the grid, so we're going to have to redo that.
-		//
 		{tag: "ul", classes: "thumbnails", name: "renderBlock"}
 	],
 	columnSpan: null,
 	itemsRendered: 0,
 	activate: function(inData){
-		this.$.renderBlock.destroyComponents();
 		//Check to see if we're already being passed the info. This is request-saving.
 		if(inData && inData.existing){
 			this.getFriends(inData.existing);
@@ -156,16 +151,15 @@ enyo.kind({
 	},
 	create: function(){
 		this.inherited(arguments);
-		
 		//Set up number of columns:
 		this.columnSpan = Math.floor(12 / this.columns);
 	},
 	getFriends: function(inSender){
 		if(inSender && inSender.friends){
+			this.$.renderBlock.destroyComponents();
 			enyo.forEach(inSender.friends, this.renderFriends, this);
 		}
-		
-		this.render();
+		this.$.renderBlock.render();
 	},
 	renderFriends: function(inSender){
 		if(this.itemsRendered < this.limit){
