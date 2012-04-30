@@ -363,26 +363,42 @@ enyo.kind({
 enyo.kind({
 	name: "homePageSearch",
 	components: [
-		{tag: "form", classes: "form-search", components: [
-			{kind: "Input", name: "input", attributes: {"type": "text", "placeholder": "Search for anything..."}, classes: "input-xlarge search-query", style: "margin-right: 8px;"},
+		{classes: "form-search input-append", components: [
+			{kind: "Input", name: "input", attributes: {"type": "text", "placeholder": "Search for anything..."}, classes: "input-xlarge search-query", onkeypress: "listenForEnter"},
 			{kind: "bootstrap.Button", name: "searchButton", content: "Search", onclick: "handleSearch"}
 		]},
 		{tag: "hr"},
-		{content: "Stuff will go here."}
+		{name: "searchResults"}
 	],
+	listenForEnter: function(inSender, inEvent){
+		if(inEvent.keyCode === 13){
+			this.handleSearch();
+		}
+	},
 	handleSearch: function(){
 		this.$.searchButton.loading("Searching...");
 		var val = this.$.input.getValue();
-		console.log(val);
 		villo.feeds.search({
-			text: val,
-			callback: enyo.bind(this, function(){
+			term: val,
+			callback: enyo.bind(this, function(inSender){
+				this.$.searchResults.destroyComponents();
 				this.$.searchButton.reset();
+				for(var x in inSender.feeds){
+					if(inSender.feeds.hasOwnProperty(x)){
+						inSender.feeds[x].timestamp = parseInt(inSender.feeds[x].timestamp, 10);
+						this.action(inSender.feeds[x], true);
+					}
+				}
 			})
 		});
 	},
-	action: function(){
-		
+	action: function(inSender, isHistory){
+		if(isHistory === true){
+			this.$.searchResults.createComponent({kind: "homePageItem", content: inSender.description, timestamp: inSender.timestamp, username: inSender.username}).render();
+			jQuery("span.timeago").timeago();
+		}else{
+			//Waterfall action, do nothing.
+		}
 	},
 	create: function(){
 		this.inherited(arguments);
